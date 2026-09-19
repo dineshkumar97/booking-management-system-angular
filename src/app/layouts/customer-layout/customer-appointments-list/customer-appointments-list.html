@@ -1,0 +1,108 @@
+<div class="appointments-page">
+
+    <div class="page-header">
+        <div>
+            <h1>My Appointments</h1>
+            <p>View and manage your appointments</p>
+        </div>
+
+        <a (click)="bookAppointment()" class="book-btn">
+            + Book Appointment
+        </a>
+    </div>
+
+    @if (appointments.length > 0) {
+
+    <div class="appointment-grid">
+
+        @for (appointment of appointments; track appointment.id) {
+
+        <div class="appointment-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>{{ appointment.serviceName }}</h2>
+                    <span class="appointment-id">
+                        {{ appointment.id }}
+                    </span>
+                </div>
+
+                <span class="status" [class.confirmed]="appointment.status === 'CONFIRMED'"
+                    [class.pending]="appointment.status === 'PENDING'"
+                    [class.completed]="appointment.status === 'COMPLETED'"
+                    [class.cancelled]="appointment.status === 'CANCELLED'">
+                    {{ appointment.status }}
+                </span>
+
+            </div>
+
+            <div class="appointment-info">
+
+                <div class="info-item">
+                    <span class="label">Staff</span>
+                    <strong>{{ appointment.staffName }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Date</span>
+                    <strong>{{ appointment.appointmentDate }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Time</span>
+                    <strong>{{ appointment.startTime }}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">Price</span>
+                    <strong>₹{{ appointment.price }}</strong>
+                </div>
+
+            </div>
+
+            <div class="card-actions">
+
+                <a class="view-btn" (click)="viewDetails(appointment.id)">
+                    View Details
+                </a>
+
+
+                @if (
+                appointment.status === 'PENDING' ||
+                appointment.status === 'CONFIRMED'
+                ) {
+                <button type="button" class="cancel-btn">
+                    Cancel
+                </button>
+                }
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+    } @else {
+
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            📅
+        </div>
+
+        <h2>No Appointments</h2>
+
+        <p>You don't have any appointments yet.</p>
+
+        <a routerLink="/customer/services" class="book-btn">
+            Book Appointment
+        </a>
+
+    </div>
+
+    }
+
+</div>

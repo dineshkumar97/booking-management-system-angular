@@ -38,6 +38,36 @@ export const routes: Routes = [
 
     children: [
       {
+        path: 'customer-dashboard',
+        loadComponent: () =>
+          import('./layouts/customer-layout/customer-dashboard/customer-dashboard')
+            .then(m => m.CustomerDashboard)
+      },
+      {
+        path: 'customer-service-list',
+        loadComponent: () =>
+          import('./layouts/customer-layout/customer-service-list/customer-service-list')
+            .then(m => m.CustomerServiceList)
+      },
+      {
+        path: 'customer-booking-list',
+        loadComponent: () =>
+          import('./layouts/customer-layout/customer-booking/customer-booking')
+            .then(m => m.CustomerBooking)
+      },
+      {
+        path: 'customer-appointment-list',
+        loadComponent: () =>
+          import('./layouts/customer-layout/customer-appointments-list/customer-appointments-list')
+            .then(m => m.CustomerAppointmentsList)
+      },
+      {
+        path: 'customer-appointment-details/:id',
+        loadComponent: () =>
+          import('./layouts/customer-layout/customer-appointment-details/customer-appointment-details')
+            .then(m => m.CustomerAppointmentDetails)
+      },
+      {
         path: 'dashboard',
         loadComponent: () =>
           import('./pages/dashboard/dashboard')
@@ -62,7 +92,7 @@ export const routes: Routes = [
             .then(m => m.Department)
       },
 
-        {
+      {
         path: 'profile',
         loadComponent: () =>
           import('./pages/profile/profile')

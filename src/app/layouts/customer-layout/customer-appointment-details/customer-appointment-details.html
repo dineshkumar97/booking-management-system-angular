@@ -1,0 +1,135 @@
+<div class="appointment-details-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1>Appointment Details</h1>
+            <p>View your appointment information</p>
+        </div>
+
+        <button type="button" class="back-btn" (click)="goBack()">
+            ← Back
+        </button>
+
+    </div>
+
+
+    <div class="details-card">
+
+        <div class="card-header">
+
+            <div>
+                <h2>{{ appointment.serviceName }}</h2>
+
+                <span class="appointment-id">
+                    Appointment ID: {{ appointment.id }}
+                </span>
+            </div>
+
+            <span class="status" [class.confirmed]="appointment.status === 'CONFIRMED'"
+                [class.pending]="appointment.status === 'PENDING'"
+                [class.completed]="appointment.status === 'COMPLETED'"
+                [class.cancelled]="appointment.status === 'CANCELLED'">
+                {{ appointment.status }}
+            </span>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <span>Service</span>
+                <strong>{{ appointment.serviceName }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Staff</span>
+                <strong>{{ appointment.staffName }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Date</span>
+                <strong>{{ appointment.appointmentDate }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Start Time</span>
+                <strong>{{ appointment.startTime }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>End Time</span>
+                <strong>{{ appointment.endTime }}</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>Price</span>
+                <strong>₹{{ appointment.price }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="notes-section">
+
+            <span>Notes</span>
+
+            <p>
+                {{ appointment.notes || 'No notes added.' }}
+            </p>
+
+        </div>
+
+
+        @if (
+        appointment.status === 'PENDING' ||
+        appointment.status === 'CONFIRMED'
+        ) {
+
+        <div class="actions">
+
+            <button type="button" class="cancel-btn" (click)="openCancelDialog()">
+                Cancel Appointment
+            </button>
+
+        </div>
+
+        }
+
+    </div>
+
+</div>
+@if (showCancelDialog) {
+
+<div class="dialog-overlay">
+
+    <div class="confirmation-dialog">
+
+        <div class="dialog-icon">
+            !
+        </div>
+
+        <h2>Cancel Appointment?</h2>
+
+        <p>
+            Are you sure you want to cancel this appointment?
+        </p>
+
+        <div class="dialog-actions">
+
+            <button type="button" class="no-btn" (click)="closeCancelDialog()">
+                No
+            </button>
+
+            <button type="button" class="yes-cancel-btn" (click)="confirmCancel()">
+                Yes, Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

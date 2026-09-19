@@ -78,9 +78,10 @@ export class MainLayout implements OnInit {
   // ============================
 
   menuItems = signal<MenuItem[]>([
-    { label: 'Dashboard', icon: '📊', route: '/dashboard' },
-    { label: 'Employees', icon: '👥', route: '/employee' },
-    { label: 'Departments', icon: '🏢', route: '/departments' },
+    { label: 'Dashboard', icon: '📊', route: '/customer-dashboard' },
+    { label: 'Service List', icon: '👥', route: '/customer-service-list' },
+    { label: 'Booking', icon: '🏢', route: '/customer-booking-list' },
+    { label: 'Appointment', icon: '🏢', route: '/customer-appointment-list' },
     // { label: 'Projects', icon: '📋', route: '/projects' },
     // { label: 'Inventory', icon: '📋', route: '/inventory' },
     // { label: 'Orders', icon: '🛒', route: '/orders' },

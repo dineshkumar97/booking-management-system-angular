@@ -1,0 +1,166 @@
+<div class="dashboard">
+
+  <!-- Welcome -->
+
+  <div class="welcome-section">
+
+    <div>
+      <h1>Welcome back, {{ userName }} 👋</h1>
+      <p>Manage your appointments easily</p>
+    </div>
+
+    <a
+      routerLink="/customer/book"
+      class="book-btn"
+    >
+      + Book Appointment
+    </a>
+
+  </div>
+
+
+  <!-- Statistics -->
+
+  <div class="stats">
+
+    <div class="stat-card">
+      <span>Upcoming</span>
+      <strong>{{ statistics.upcoming }}</strong>
+      <small>Appointments</small>
+    </div>
+
+    <div class="stat-card">
+      <span>Completed</span>
+      <strong>{{ statistics.completed }}</strong>
+      <small>Appointments</small>
+    </div>
+
+    <div class="stat-card">
+      <span>Cancelled</span>
+      <strong>{{ statistics.cancelled }}</strong>
+      <small>Appointments</small>
+    </div>
+
+  </div>
+
+
+  <!-- Upcoming Appointment -->
+
+  <section class="upcoming-section">
+
+    <div class="section-header">
+      <h2>Upcoming Appointment</h2>
+
+      <a
+        routerLink="/customer/appointments"
+        class="view-all"
+      >
+        My Appointments
+      </a>
+    </div>
+
+
+    <div class="appointment-card">
+
+      <div class="appointment-header">
+
+        <h3>
+          {{ upcomingAppointment.service }}
+        </h3>
+
+        <span>
+          {{ upcomingAppointment.status }}
+        </span>
+
+      </div>
+
+
+      <div class="appointment-info">
+
+        <p>
+          📅 {{ upcomingAppointment.date }}
+        </p>
+
+        <p>
+          🕐 {{ upcomingAppointment.time }}
+        </p>
+
+        <p>
+          👤 Staff: {{ upcomingAppointment.staff }}
+        </p>
+
+        <p>
+          💰 Price: ₹{{ upcomingAppointment.price }}
+        </p>
+
+      </div>
+
+
+      <div class="actions">
+
+        <!-- <a
+          [routerLink]="[
+            '/customer/appointments',
+            upcomingAppointment.id
+          ]"
+          class="view-btn"
+        >
+          View Appointment
+        </a> -->
+
+        <button type="button">
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Recent Appointments -->
+
+  <section class="recent-section">
+
+    <div class="section-header">
+
+      <h2>Recent Appointments</h2>
+
+      <a
+        routerLink="/customer/appointments"
+        class="view-all"
+      >
+        View All
+      </a>
+
+    </div>
+
+
+    @for (appointment of recentAppointments; track appointment.id) {
+
+      <div class="recent-row">
+
+        <span>
+          {{ appointment.service }}
+        </span>
+
+        <span>
+          {{ appointment.date }}
+        </span>
+
+        <span>
+          {{ appointment.staff }}
+        </span>
+
+        <span>
+          {{ appointment.status }}
+        </span>
+
+      </div>
+
+    }
+
+  </section>
+
+</div>
