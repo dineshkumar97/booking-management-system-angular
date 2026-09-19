@@ -1,0 +1,45 @@
+<div class="modal-overlay" (click)="closePopup()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="modal-header">
+            <div>
+                <h2>
+                    {{ isEditMode() ? 'Update Department' : 'Add Department' }}
+                </h2>
+            </div>
+
+            <button type="button" class="close-button" (click)="closePopup()">
+                ×
+            </button>
+        </div>
+        <!-- Body -->
+        <form [formGroup]="departmentForm" (ngSubmit)="saveUpdate()">
+            <div class="modal-body">
+                <div class="form-grid ">
+                    <div class="form-group">
+                        <label>Department Name</label>
+                        <input type="text" formControlName="name" placeholder="Enter employee name">
+                        @if (
+                        departmentForm.get('name')?.invalid &&
+                        departmentForm.get('name')?.touched
+                        ) {
+                        <small class="form-error">
+                            Department name is required
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="cancel-button" (click)="closePopup()">
+                    Cancel
+                </button>
+                <button type="submit" class="save-button">
+
+                    {{ isEditMode() ? 'Update' : 'Save' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

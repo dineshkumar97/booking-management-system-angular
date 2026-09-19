@@ -1,0 +1,518 @@
+<!-- Page Heading -->
+
+      <div class="page-heading">
+
+        <div>
+
+          <h1>
+            Dashboard
+          </h1>
+
+          <p>
+            Welcome back, {{ userName() }}. Here's what's happening today.
+          </p>
+
+        </div>
+
+
+        <button class="date-button">
+          📅 Last 30 days
+          <span>⌄</span>
+        </button>
+
+      </div>
+
+
+      <!-- ==================================
+           STAT CARDS
+      =================================== -->
+
+      <div class="stats-grid">
+
+
+        <!-- Revenue -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon revenue-icon">
+              ↗
+            </div>
+
+            <span class="growth positive">
+              +12.3%
+            </span>
+
+          </div>
+
+          <div class="stat-value">
+            ${{ totalRevenue().toLocaleString() }}
+          </div>
+
+          <div class="stat-label">
+            Total Revenue
+          </div>
+
+        </div>
+
+
+        <!-- Orders -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon orders-icon">
+              🛒
+            </div>
+
+            <span class="growth positive">
+              +8.1%
+            </span>
+
+          </div>
+
+          <div class="stat-value">
+            {{ totalOrders().toLocaleString() }}
+          </div>
+
+          <div class="stat-label">
+            Total Orders
+          </div>
+
+        </div>
+
+
+        <!-- Low Stock -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon warning-icon">
+              ⚠
+            </div>
+
+            <span class="growth warning">
+              +5 items
+            </span>
+
+          </div>
+
+          <div class="stat-value">
+            {{ lowStockItems() }}
+          </div>
+
+          <div class="stat-label">
+            Low Stock Items
+          </div>
+
+        </div>
+
+
+        <!-- Products -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon products-icon">
+              ◇
+            </div>
+
+            <span class="growth positive">
+              +12 new
+            </span>
+
+          </div>
+
+          <div class="stat-value">
+            {{ activeProducts() }}
+          </div>
+
+          <div class="stat-label">
+            Active Products
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           CHARTS
+      =================================== -->
+
+      <div class="charts-grid">
+
+
+        <!-- Monthly Revenue -->
+
+        <div class="chart-card">
+
+          <div class="chart-header">
+
+            <div>
+
+              <h2>
+                Monthly Revenue
+              </h2>
+
+              <p>
+                Past 12 months performance
+              </p>
+
+            </div>
+
+
+            <div class="chart-tabs">
+
+              <button class="selected">
+                12M
+              </button>
+
+              <button>
+                6M
+              </button>
+
+              <button>
+                3M
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Revenue Chart -->
+
+          <div class="revenue-chart">
+
+            <div class="y-axis">
+
+              <span>$100k</span>
+              <span>$75k</span>
+              <span>$50k</span>
+              <span>$25k</span>
+              <span>$0</span>
+
+            </div>
+
+
+            <div class="bars-area">
+
+              <div class="grid-line line-1"></div>
+              <div class="grid-line line-2"></div>
+              <div class="grid-line line-3"></div>
+              <div class="grid-line line-4"></div>
+
+
+              <div class="bars">
+
+                @for (
+                  item of revenueData();
+                  track item.month
+                ) {
+
+                  <div class="bar-column">
+
+                    <div
+                      class="bar"
+                      [style.height.%]="
+                        (item.value / maxRevenue()) * 85
+                      ">
+
+                    </div>
+
+                    <span>
+                      {{ item.month }}
+                    </span>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Inventory Trends -->
+
+        <div class="chart-card">
+
+          <div class="chart-header">
+
+            <div>
+
+              <h2>
+                Inventory Trends
+              </h2>
+
+              <p>
+                Stock levels by category
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- Inventory Chart -->
+
+          <div class="inventory-chart">
+
+            <div class="inventory-y-axis">
+
+              <span>1000</span>
+              <span>750</span>
+              <span>500</span>
+              <span>250</span>
+              <span>0</span>
+
+            </div>
+
+
+            <div class="inventory-area">
+
+              <div class="inventory-grid grid-1"></div>
+              <div class="inventory-grid grid-2"></div>
+              <div class="inventory-grid grid-3"></div>
+              <div class="inventory-grid grid-4"></div>
+
+
+              <!-- Simulated Lines -->
+
+              <svg
+                class="inventory-svg"
+                viewBox="0 0 600 180"
+                preserveAspectRatio="none">
+
+                <!-- In Stock -->
+
+                <polyline
+                  points="0,35 50,32 100,30 150,32 200,28 250,29 300,27 350,30 400,26 450,27 500,25 550,28 600,34"
+                  fill="none"
+                  stroke="#10b981"
+                  stroke-width="2"
+                />
+
+                <!-- Low Stock -->
+
+                <polyline
+                  points="0,155 50,158 100,156 150,157 200,155 250,158 300,156 350,157 400,155 450,158 500,156 550,157 600,155"
+                  fill="none"
+                  stroke="#f59e0b"
+                  stroke-width="2"
+                />
+
+                <!-- Out of Stock -->
+
+                <polyline
+                  points="0,165 50,167 100,166 150,168 200,165 250,167 300,166 350,168 400,166 450,167 500,165 550,168 600,166"
+                  fill="none"
+                  stroke="#ef4444"
+                  stroke-width="2"
+                />
+
+              </svg>
+
+
+              <div class="inventory-months">
+
+                @for (
+                  item of inventoryData();
+                  track item.month
+                ) {
+
+                  <span>
+                    {{ item.month }}
+                  </span>
+
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Legend -->
+
+          <div class="chart-legend">
+
+            <span>
+              <i class="legend-dot green"></i>
+              In Stock
+            </span>
+
+            <span>
+              <i class="legend-dot orange"></i>
+              Low Stock
+            </span>
+
+            <span>
+              <i class="legend-dot red"></i>
+              Out of Stock
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ==================================
+           NEEDS ATTENTION
+      =================================== -->
+
+      <div class="attention-card">
+
+
+        <!-- Table Header -->
+
+        <div class="attention-header">
+
+          <div class="attention-title">
+
+            <span class="attention-icon">
+              !
+            </span>
+
+            <h2>
+              Needs Attention
+            </h2>
+
+            <span class="attention-count">
+              {{ attentionCount() }} items
+            </span>
+
+          </div>
+
+
+          <button class="view-all">
+            View All
+          </button>
+
+        </div>
+
+
+        <!-- Table -->
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>SKU</th>
+
+                <th>Product Name</th>
+
+                <th>Category</th>
+
+                <th>Current Stock</th>
+
+                <th>Reorder Point</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                product of products();
+                track product.sku
+              ) {
+
+                <tr>
+
+                  <td class="sku">
+                    {{ product.sku }}
+                  </td>
+
+                  <td>
+
+                    <div class="product-name">
+
+                      <span class="product-image">
+                        ◇
+                      </span>
+
+                      {{ product.name }}
+
+                    </div>
+
+                  </td>
+
+                  <td>
+                    {{ product.category }}
+                  </td>
+
+                  <td
+                    [class.stock-danger]="product.stock === 0"
+                    [class.stock-warning]="product.stock > 0">
+
+                    {{ product.stock }}
+
+                  </td>
+
+                  <td>
+                    {{ product.reorderPoint }}
+                  </td>
+
+                  <td>
+
+                    <span
+                      class="status"
+                      [class.low-stock]="
+                        product.status === 'Low Stock'
+                      "
+                      [class.out-of-stock]="
+                        product.status === 'Out of Stock'
+                      ">
+
+                      {{ product.status }}
+
+                    </span>
+
+                  </td>
+
+                  <td>
+
+                    <button
+                      class="reorder-button"
+                      (click)="reorder(product)">
+
+                      Reorder
+
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>

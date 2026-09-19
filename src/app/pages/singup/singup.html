@@ -1,0 +1,131 @@
+<div class="login-container">
+    <div class="login-card">
+        <h2>Create Account</h2>
+        <form [formGroup]="signupForm" (ngSubmit)="submit()">
+            <!-- Name -->
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" formControlName="name" placeholder="Enter your name"
+                    [class.invalid]="signupForm.get('name')?.invalid && signupForm.get('name')?.touched" />
+                <!-- Required -->
+                @if (
+                signupForm.get('name')?.touched &&
+                signupForm.get('name')?.hasError('required')
+                ) {
+                <small class="form-error">
+                    Full name is required
+                </small>
+                }
+            </div>
+
+
+            <!-- Email -->
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" formControlName="email" placeholder="Enter your email"
+                    [class.invalid]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" />
+                <!-- Required -->
+                @if (signupForm.get('email')?.touched && signupForm.get('email')?.hasError('required')) {
+                <small class="form-error">
+                    Email is required
+                </small>
+                }
+
+                <!-- Invalid Email -->
+                @else if (
+                signupForm.get('email')?.touched &&
+                signupForm.get('email')?.hasError('email')
+                ) {
+                <small class="form-error">
+                    Please enter a valid email address
+                </small>
+                }
+
+            </div>
+
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" formControlName="phone" placeholder="Enter 10 digit phone number" maxlength="10">
+                @if (
+                signupForm.get('phone')?.invalid &&
+                signupForm.get('phone')?.touched
+                ) {
+                <small class="form-error">
+                    Enter a valid 10 digit phone number
+                </small>
+                }
+
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" formControlName="password" placeholder="Enter your password" [class.invalid]="
+            signupForm.get('password')?.invalid &&
+            signupForm.get('password')?.touched
+          " />
+            </div>
+            <!-- Password -->
+            <div class="password-rules">
+                <p>Password must contain:</p>
+                <ul>
+                    <li [class.valid]="hasMinLength()">
+                        <span>{{ hasMinLength() ? '✓' : '✕' }}</span>
+                        At least 8 characters
+                    </li>
+                    <li [class.valid]="hasUppercase()">
+                        <span>{{ hasUppercase() ? '✓' : '✕' }}</span>
+                        Uppercase letter
+                    </li>
+
+                    <li [class.valid]="hasLowercase()">
+                        <span>{{ hasLowercase() ? '✓' : '✕' }}</span>
+                        Lowercase letter
+                    </li>
+
+                    <li [class.valid]="hasNumber()">
+                        <span>{{ hasNumber() ? '✓' : '✕' }}</span>
+                        Number
+                    </li>
+
+                    <li [class.valid]="hasSpecialChar()">
+                        <span>{{ hasSpecialChar() ? '✓' : '✕' }}</span>
+                        Special character
+                    </li>
+                </ul>
+
+            </div>
+
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+                @if (
+                signupForm.get('confirmPassword')?.touched &&
+                signupForm.get('confirmPassword')?.hasError('required')
+                ) {
+                <small class="form-error">
+                    Confirm password is required
+                </small>
+                }
+                @if (
+                signupForm.get('confirmPassword')?.touched &&
+                signupForm.hasError('passwordMismatch')
+                ) {
+                <small class="form-error">
+                    Passwords do not match
+                </small>
+                }
+            </div>
+            <!-- Submit -->
+            <button type="submit" class="login-btn" >
+                SIGN UP
+            </button>
+        </form>
+        <div class="login-options mt-3">
+            Already have an account?
+            <a (click)="gotoLogin()" type="button">Login </a>
+        </div>
+    </div>
+</div>

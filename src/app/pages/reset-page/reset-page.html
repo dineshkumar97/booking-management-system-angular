@@ -1,0 +1,72 @@
+<div class="forgot-password">
+
+    <h2>Reset Password</h2>
+
+    <form [formGroup]="resetForm" (ngSubmit)="submit()">
+
+        <!-- New Password -->
+        <div class="form-group">
+
+            <label>New Password</label>
+
+            <input type="password" formControlName="password" placeholder="Enter new password" />
+
+            @if (
+            resetForm.get('password')?.touched &&
+            resetForm.get('password')?.hasError('required')
+            ) {
+            <small class="field-error">
+                Password is required
+            </small>
+            }
+
+            @if (
+            resetForm.get('password')?.touched &&
+            resetForm.get('password')?.hasError('minlength')
+            ) {
+            <small class="field-error">
+                Password must be at least 8 characters
+            </small>
+            }
+
+        </div>
+
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+
+            <label>Confirm Password</label>
+
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+
+            @if (
+            resetForm.get('confirmPassword')?.touched &&
+            resetForm.get('confirmPassword')?.hasError('required')
+            ) {
+            <small class="field-error">
+                Confirm password is required
+            </small>
+            }
+
+            @if (
+            resetForm.get('confirmPassword')?.touched &&
+            resetForm.hasError('passwordMismatch')
+            ) {
+            <small class="field-error">
+                Passwords do not match
+            </small>
+            }
+
+        </div>
+
+
+        <!-- Submit -->
+        <button type="submit" class="login-btn">
+
+            Reset Password
+          
+        </button>
+
+    </form>
+
+</div>

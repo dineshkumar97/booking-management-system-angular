@@ -1,0 +1,109 @@
+<div class="page-header">
+    <h1>Department</h1>
+
+    <div class="header-actions">
+        <button class="reorder-button" type="button" (click)="addDepartment()">
+            Add Department
+        </button>
+    </div>
+</div>
+
+@if (showDepartmentForm) {
+<app-department-form [isEditMode]="isEditMode" (departmentTable)="departmentSaved()"
+    [departmentEditValue]="selectedDepartment" (close)="closeDepartmentForm()">
+</app-department-form>
+}
+<div class="attention-card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.no</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            @for (Department of departments(); track Department._id; let i= $index) {
+            <tr class="table-hover">
+                <td>{{ i + 1 }}</td>
+                <td [class.active-name]="Department?.isActive === true"
+                    [class.inactive-name]="Department?.isActive === false">
+
+                    {{ Department?.name }}
+
+                </td>
+                <td class="action-buttons">
+                    <button class="edit-button tooltip" (click)="editDepartment(Department)">
+                        ✏️
+                    </button>
+                    <button type="button" class="status-button" (click)="openStatusConfirmation(Department)"
+                        [title]="Department.isActive ? 'Deactivate Department' : 'Activate Department'">
+
+                        <span class="status-icon" [class.active]="Department.isActive"
+                            [class.inactive]="!Department.isActive">
+                        </span>
+                        <!-- <span [class.active-icon]="Department.isActive"
+        [class.inactive-icon]="!Department.isActive">
+    {{ Department.isActive ? '✓' : '×' }}
+  </span> -->
+
+                    </button>
+                    <!-- <button class="delete-button tooltip" (click)="deleteDepartment(Department._id)">
+                        🗑️
+                    </button> -->
+                </td>
+            </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+
+@if (showStatusPopup) {
+<div class="modal-overlay" (click)="closeStatusPopup()">
+    <div class="modal-container status-modal" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="modal-header">
+
+            <h2>
+                Confirm
+            </h2>
+
+            <button type="button" class="close-button" (click)="closeStatusPopup()">
+                ×
+            </button>
+
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body delete-body">
+            <p>
+                Are you sure you want to delete
+                <strong>{{ selectedDepartment?.name }}</strong>?
+            </p>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+
+            <button type="button" class="cancel-button" (click)="closeStatusPopup()">
+                Cancel
+            </button>
+
+            <button type="button" class="save-button" (click)="confirmStatusChange()">
+
+               Confirm
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

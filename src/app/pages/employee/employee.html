@@ -1,0 +1,278 @@
+<div class="page-header">
+    <h1>Employee</h1>
+
+    <div class="header-actions">
+        <button class="reorder-button" type="button" (click)="addEmployee()">
+            Add Employee
+        </button>
+    </div>
+</div>
+
+<div class="search-form">
+
+    <div class="form-grid-search">
+
+        <!-- Name -->
+        <div class="form-group-search">
+            <label>Employee Name</label>
+
+            <input type="text" [(ngModel)]="searchName" placeholder="Search employee name">
+        </div>
+
+        <!-- Email -->
+        <!-- <div class="form-group-search">
+            <label>Email</label>
+
+            <input type="text" [(ngModel)]="searchEmail" placeholder="Search email">
+        </div> -->
+
+        <!-- Department -->
+        <div class="form-group-search">
+            <label>Department</label>
+
+            <select [(ngModel)]="searchDepartment">
+                <option value="">All Departments</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+            </select>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group-search">
+            <label>Status</label>
+
+            <select [(ngModel)]="searchStatus">
+                <option value="">All Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+
+        <div class="form-group-search">
+            <label class="visibility-hidden">Search</label>
+
+            <div class="search-actions">
+
+                <button type="button" class="search-button" (click)="searchEmployees()">
+                    🔍 Search
+                </button>
+
+                <button type="button" class="clear-button" (click)="clearSearch()">
+                    Clear
+                </button>
+
+                <!-- Excel Icon -->
+                <span class="export-icon excel-icon" title="Export Excel" (click)="exportExcel()">
+                    <i class="fa-solid fa-file-excel"></i>
+                </span>
+
+                <!-- PDF Icon -->
+                <span class="export-icon pdf-icon" title="Export PDF" (click)="exportPDF()">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </span>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Buttons -->
+
+
+</div>
+
+
+<div class="attention-card">
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>S.no</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>DOB</th>
+                    <th>Department</th>
+                    <th>Phone</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @for (
+                employee of paginatedEmployees();
+                track employee._id;
+                let i = $index
+                ) {
+
+                <tr class="table-hover">
+
+                    <!-- Correct S.No across pages -->
+                    <td>
+                        {{ (currentPage() - 1) * pageSize() + i + 1 }}
+                    </td>
+
+                    <td [class.active-name]="employee?.isActive === true"
+                        [class.inactive-name]="employee?.isActive === false">
+                        {{ employee?.name }}
+                    </td>
+
+                    <td>
+                        {{ employee?.email }}
+                    </td>
+
+                    <td>
+                        {{ employee?.dob | commonDate }}
+                    </td>
+
+                    <td>
+                        {{ employee?.department }}
+                    </td>
+
+                    <td>
+                        {{ employee?.phone }}
+                    </td>
+
+                    <td>
+                        {{ employee?.createdAt | commonDate }}
+                    </td>
+
+                    <td>
+                        {{ employee?.updatedAt | commonDate }}
+                    </td>
+
+                    <td class="action-buttons">
+
+                        <button class="edit-button tooltip" (click)="editEmployee(employee)">
+                            ✏️
+                        </button>
+
+                        <button type="button" class="status-button" (click)="openStatusConfirmation(employee)" [title]="
+                                    employee.isActive
+                                        ? 'Deactivate Employee'
+                                        : 'Activate Employee'
+                                ">
+                            <span class="status-icon" [class.active]="employee.isActive"
+                                [class.inactive]="!employee.isActive">
+                            </span>
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- Pagination -->
+    <div class="pagination">
+
+        <button type="button" (click)="previousPage()" [disabled]="currentPage() === 1">
+            Previous
+        </button>
+
+
+        @for (page of pages(); track page) {
+
+        <button type="button" [class.active-page]="currentPage() === page" (click)="goToPage(page)">
+            {{ page }}
+        </button>
+
+        }
+
+
+        <button type="button" (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+            Next
+        </button>
+
+    </div>
+
+</div>
+
+
+
+@if (showEmployeeForm) {
+<app-employee-create-update [isEditMode]="isEditMode" (employeeTable)="employeeSaved()" [employee]="selectedEmployee"
+    (close)="closeEmployeeForm()">
+</app-employee-create-update>
+}
+
+@if (showStatusPopup) {
+
+<div class="modal-overlay" (click)="closeStatusPopup()">
+
+    <div class="modal-container status-modal" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="modal-header">
+
+            <h2>
+                {{ selectedEmployee?.isActive
+                ? 'Deactivate Employee'
+                : 'Activate Employee' }}
+            </h2>
+
+            <button type="button" class="close-button" (click)="closeStatusPopup()">
+                ×
+            </button>
+
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body confirmation-body">
+
+            <div class="confirmation-icon">
+                {{ selectedEmployee?.isActive ? '⚠️' : '✓' }}
+            </div>
+
+            <p>
+                Are you sure you want to
+                <strong>
+                    {{ selectedEmployee?.isActive
+                    ? 'deactivate'
+                    : 'activate' }}
+                </strong>
+                this employee?
+            </p>
+
+            <span>
+                {{ selectedEmployee?.isActive
+                ? 'The employee will be marked as inactive.'
+                : 'The employee will be marked as active.' }}
+            </span>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+
+            <button type="button" class="cancel-button" (click)="closeStatusPopup()">
+                Cancel
+            </button>
+
+            <button type="button" class="save-button" (click)="confirmStatusChange()">
+
+                {{ selectedEmployee?.isActive ? 'Deactivate' : 'Activate' }}
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}
