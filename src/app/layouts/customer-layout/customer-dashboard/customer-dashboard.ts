@@ -1,52 +1,251 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { CustomerService } from '../customer-service';
 
 @Component({
   selector: 'app-customer-dashboard',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './customer-dashboard.html',
   styleUrl: './customer-dashboard.scss',
 })
-export class CustomerDashboard {
+export class CustomerDashboard implements OnInit {
 
   userName = 'Dinesh';
 
-  upcomingAppointment = {
-    id: 'APT001',
-    service: 'Hair Cut',
-    date: '20 Sep 2026',
-    time: '10:30 AM - 11:00 AM',
-    staff: 'John',
-    price: 500,
-    status: 'CONFIRMED'
-  };
+  recentAppointments: any[] = [];
+
+  upcomingAppointment: any = null;
+
+  showCancelDialog = false;
+
+  cancelLoading = false;
 
   statistics = {
-    upcoming: 2,
-    completed: 8,
-    cancelled: 1
+    upcoming: 0,
+    completed: 0,
+    cancelled: 0
   };
 
-  recentAppointments = [
-    {
-      id: 'APT002',
-      service: 'Hair Cut',
-      date: '15 Sep 2026',
-      staff: 'John',
-      status: 'COMPLETED'
-    },
-    {
-      id: 'APT003',
-      service: 'Facial',
-      date: '10 Sep 2026',
-      staff: 'Sarah',
-      status: 'COMPLETED'
-    },
-    {
-      id: 'APT004',
-      service: 'Massage',
-      date: '05 Sep 2026',
-      staff: 'David',
-      status: 'CANCELLED'
+  constructor(
+    private router: Router,
+    private customerService: CustomerService
+  ) {}
+
+  ngOnInit(): void {
+    this.getMyAppointments();
+  }
+
+  // =========================
+  // GET MY APPOINTMENTS
+  // =========================
+
+  getMyAppointments(): void {
+
+    this.customerService.getMyAppointments().subscribe({
+
+      next: (response: any) => {
+
+        console.log('API RESPONSE:', response);
+
+        const appointments = response?.data || [];
+
+        console.log('APPOINTMENTS:', appointments);
+
+        this.recentAppointments = appointments;
+
+        // =========================
+        // STATISTICS
+        // =========================
+
+        this.statistics.upcoming = appointments.filter(
+          (appointment: any) =>
+            appointment.status === 'PENDING' ||
+            appointment.status === 'CONFIRMED'
+        ).length;
+
+        this.statistics.completed = appointments.filter(
+          (appointment: any) =>
+            appointment.status === 'COMPLETED'
+        ).length;
+
+        this.statistics.cancelled = appointments.filter(
+          (appointment: any) =>
+            appointment.status === 'CANCELLED'
+        ).length;
+
+        // =========================
+        // FIND UPCOMING APPOINTMENT
+        // =========================
+
+        const upcoming = appointments
+          .filter(
+            (appointment: any) =>
+              appointment.status === 'PENDING' ||
+              appointment.status === 'CONFIRMED'
+          )
+          .sort(
+            (a: any, b: any) =>
+              new Date(a.appointmentDate).getTime() -
+              new Date(b.appointmentDate).getTime()
+          );
+
+        if (upcoming.length > 0) {
+
+          const appointment = upcoming[0];
+
+          this.upcomingAppointment = {
+            id: appointment._id,
+            service: appointment.serviceId?.name || '',
+            status: appointment.status,
+            date: appointment.appointmentDate,
+            time: appointment.startTime,
+            staff: appointment.staffId?.name || '',
+            price: appointment.serviceId?.price || 0
+          };
+
+          console.log(
+            'UPCOMING APPOINTMENT:',
+            this.upcomingAppointment
+          );
+
+        } else {
+
+          this.upcomingAppointment = null;
+
+        }
+
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Failed to load appointments:',
+          error
+        );
+
+      }
+
+    });
+
+  }
+
+  // =========================
+  // BOOK APPOINTMENT
+  // =========================
+
+  bookAppointment(): void {
+
+    this.router.navigate([
+      '/customer-service-list'
+    ]);
+
+  }
+
+  // =========================
+  // MY APPOINTMENTS
+  // =========================
+
+  myAppointment(): void {
+
+    this.router.navigate([
+      '/customer-appointment-list'
+    ]);
+
+  }
+
+  // =========================
+  // OPEN CANCEL DIALOG
+  // =========================
+
+  openCancelDialog(): void {
+
+    if (!this.upcomingAppointment?.id) {
+
+      console.error(
+        'Appointment ID is missing'
+      );
+
+      return;
     }
-  ];
+
+    this.showCancelDialog = true;
+
+  }
+
+  // =========================
+  // CLOSE CANCEL DIALOG
+  // =========================
+
+  closeCancelDialog(): void {
+
+    if (this.cancelLoading) {
+      return;
+    }
+
+    this.showCancelDialog = false;
+
+  }
+
+  // =========================
+  // CANCEL APPOINTMENT
+  // =========================
+
+  cancelAppointment(): void {
+
+    const appointmentId =
+      this.upcomingAppointment?.id;
+
+    console.log(
+      'Cancel Appointment ID:',
+      appointmentId
+    );
+
+    if (!appointmentId) {
+
+      console.error(
+        'Appointment ID is missing'
+      );
+
+      return;
+
+    }
+
+    this.cancelLoading = true;
+
+    this.customerService
+      .cancelAppointment(appointmentId)
+      .subscribe({
+
+        next: (response: any) => {
+
+          console.log(
+            'Cancel success:',
+            response
+          );
+
+          this.cancelLoading = false;
+
+          this.showCancelDialog = false;
+
+          // Reload latest appointment data
+          this.getMyAppointments();
+
+        },
+
+        error: (error: any) => {
+
+          console.error(
+            'Cancel error:',
+            error
+          );
+
+          this.cancelLoading = false;
+
+        }
+
+      });
+
+  }
+
 }

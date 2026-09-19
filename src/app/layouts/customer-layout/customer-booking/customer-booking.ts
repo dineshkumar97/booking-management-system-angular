@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { CustomerService } from '../customer-service';
+import { ToastService } from '../../../toast/toast-service';
 interface Staff {
-  id: string;
+  _id: string;
   name: string;
-  role: string;
+  designation: string;
 }
 
 @Component({
@@ -23,7 +24,7 @@ export class CustomerBooking implements OnInit {
 
   serviceId = '';
 
-  selectedStaffId = '';
+  selectedStaffId: any;
   selectedDate = '';
   selectedTime = '';
 
@@ -32,31 +33,15 @@ export class CustomerBooking implements OnInit {
   // Service
   // =========================
 
-  serviceName = 'Hair Cut';
-  servicePrice = 500;
+  serviceName: any;
+  servicePrice: any;
 
 
   // =========================
   // Staff
   // =========================
 
-  staffs: Staff[] = [
-    {
-      id: '1',
-      name: 'John',
-      role: 'Senior Stylist'
-    },
-    {
-      id: '2',
-      name: 'Sarah',
-      role: 'Beauty Specialist'
-    },
-    {
-      id: '3',
-      name: 'David',
-      role: 'Massage Therapist'
-    }
-  ];
+
 
 
   // =========================
@@ -93,10 +78,13 @@ export class CustomerBooking implements OnInit {
     '04:00 PM'
   ];
 
-
+  staffList: any;
+  serviceDetails: any;
   constructor(
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private customerService: CustomerService,
+    private toastService: ToastService
+  ) { }
 
 
   ngOnInit(): void {
@@ -105,6 +93,33 @@ export class CustomerBooking implements OnInit {
       this.route.snapshot.queryParamMap.get('serviceId') || '';
 
     // console.log('Selected Service:', this.serviceId);
+    this.getStaffList();
+    this.getServiceParticular();
+
+  }
+
+
+  getStaffList(): void {
+    this.customerService.getStaffAll().subscribe({
+      next: (response: any) => {
+        this.staffList = response.data;
+      },
+      error: (error) => {
+      }
+    });
+
+  }
+
+  getServiceParticular(): void {
+    this.customerService.getServiceID(this.serviceId).subscribe({
+      next: (response: any) => {
+        this.serviceDetails = response.data;
+        this.serviceName = this.serviceDetails.name;
+        this.servicePrice = this.serviceDetails.price
+      },
+      error: (error) => {
+      }
+    });
 
   }
 
@@ -114,11 +129,11 @@ export class CustomerBooking implements OnInit {
   // =========================
 
   get selectedStaff(): Staff | undefined {
+    console.log(this.staffList)
 
-    return this.staffs.find(
-      staff => staff.id === this.selectedStaffId
+    return this.staffList.find(
+      (staff: any) => staff?._id === this.selectedStaffId?._id
     );
-
   }
 
 
@@ -133,9 +148,11 @@ export class CustomerBooking implements OnInit {
   // Selection Methods
   // =========================
 
-  selectStaff(staffId: string): void {
-
+ staffselectBox: string | undefined;
+  selectStaff(staffId: any): void {
+    this.staffselectBox = staffId?._id
     this.selectedStaffId = staffId;
+    console.log(this.selectedStaffId)
 
   }
 
@@ -185,7 +202,7 @@ export class CustomerBooking implements OnInit {
     switch (this.currentStep) {
 
       case 1:
-        return !!this.selectedStaffId;
+        return !!this.selectedStaffId?._id;
 
       case 2:
         return !!this.selectedDate;
@@ -206,19 +223,21 @@ export class CustomerBooking implements OnInit {
   // =========================
 
   confirmBooking(): void {
-
-    const booking = {
+    const booking: any = {
       serviceId: this.serviceId,
-      serviceName: this.serviceName,
-      servicePrice: this.servicePrice,
-      staffId: this.selectedStaffId,
-      staffName: this.selectedStaffName,
-      date: this.selectedDate,
-      time: this.selectedTime
+      staffId: this.selectedStaffId?._id,
+      appointmentDate: this.selectedDate,
+      startTime: this.selectedTime,
+      notes: 'Noted'
     };
-
-    console.log('Booking:', booking);
-
+    this.customerService.createAppointment(booking).subscribe({
+      next: (response: any) => {
+        this.toastService.success(response.message);
+      },
+      error: (error) => {
+        this.toastService.error(error?.error?.message);
+      }
+    });
   }
 
 }

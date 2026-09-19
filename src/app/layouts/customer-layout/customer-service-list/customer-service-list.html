@@ -1,175 +1,153 @@
 <div class="services-page">
 
-    <!-- Header -->
+  <!-- Header -->
 
-    <div class="page-header">
+  <div class="page-header">
 
-        <div>
-            <h1>Services</h1>
-            <p>Choose a service to book an appointment</p>
-        </div>
-
+    <div>
+      <h1>Services</h1>
+      <p>Choose a service to book an appointment</p>
     </div>
 
-
-    <!-- Search -->
-
-    <div class="search-box">
-
-        <span>🔍</span>
-
-        <input type="text" placeholder="Search services..." [(ngModel)]="searchText" />
-
-    </div>
+  </div>
 
 
-    <!-- Services -->
+  <!-- Search -->
 
-    <div class="service-grid">
+  <div class="search-box">
 
-        @for (service of filteredServices; track service.id) {
+    <span>🔍</span>
 
-        <div class="service-card">
+    <input type="text" placeholder="Search services..." [(ngModel)]="searchText" />
 
-            <div class="service-icon">
-                ✂️
-            </div>
+  </div>
 
-            <div class="service-content">
 
-                <h2>
-                    {{ service.name }}
-                </h2>
+  <!-- Services -->
 
-                <p>
-                    {{ service.description }}
-                </p>
+  <div class="service-grid">
 
-                <div class="service-info">
+    @for (service of filteredServices; track service?._id) {
 
-                    <span>
-                        ⏱ {{ service.duration }} min
-                    </span>
+    <div class="service-card">
 
-                    <strong>
-                        ₹{{ service.price }}
-                    </strong>
+      <div class="service-icon">
+        ✂️
+      </div>
 
-                </div>
+      <div class="service-content">
 
-                <button type="button" class="book-btn" (click)="openDetails(service)">
-                    View Details
-                </button>
+        <h2>
+          {{ service.name }}
+        </h2>
 
-            </div>
+        <p>
+          {{ service.description }}
+        </p>
+
+        <div class="service-info">
+
+          <span>
+            ⏱ {{ service.duration }} min
+          </span>
+
+          <strong>
+            ₹{{ service.price }}
+          </strong>
 
         </div>
 
-        }
+        <button type="button" class="book-btn" (click)="openDetails(service)">
+          View Details
+        </button>
 
-    </div>
+      </div>
 
-
-    <!-- Empty -->
-
-    @if (filteredServices.length === 0) {
-
-    <div class="empty-state">
-        <h3>No services found</h3>
-        <p>Try another service name.</p>
     </div>
 
     }
 
+  </div>
+
+
+  <!-- Empty -->
+
+  @if (filteredServices?.length === 0) {
+
+  <div class="empty-state">
+    <h3>No services found</h3>
+    <p>Try another service name.</p>
+  </div>
+
+  }
+
 </div>
 @if (selectedService) {
 
-  <div
-    class="modal-overlay"
-    (click)="closeDetails()"
-  >
+<div class="modal-overlay" (click)="closeDetails()">
 
-    <div
-      class="service-modal"
-      (click)="$event.stopPropagation()"
-    >
+  <div class="service-modal" (click)="$event.stopPropagation()">
 
-      <button
-        type="button"
-        class="close-btn"
-        (click)="closeDetails()"
-      >
-        ✕
-      </button>
+    <button type="button" class="close-btn" (click)="closeDetails()">
+      ✕
+    </button>
 
-      <div class="modal-icon">
-        ✂️
+    <div class="modal-icon">
+      ✂️
+    </div>
+
+    <h2>
+      {{ selectedService.name }}
+    </h2>
+
+    <p class="modal-description">
+      {{ selectedService.description }}
+    </p>
+
+    <div class="modal-info">
+
+      <div>
+        <span>Duration</span>
+        <strong>
+          {{ selectedService.duration }} minutes
+        </strong>
       </div>
 
-      <h2>
-        {{ selectedService.name }}
-      </h2>
-
-      <p class="modal-description">
-        {{ selectedService.description }}
-      </p>
-
-      <div class="modal-info">
-
-        <div>
-          <span>Duration</span>
-          <strong>
-            {{ selectedService.duration }} minutes
-          </strong>
-        </div>
-
-        <div>
-          <span>Price</span>
-          <strong>
-            ₹{{ selectedService.price }}
-          </strong>
-        </div>
-
-      </div>
-
-      <div class="included">
-
-        <h3>What's included?</h3>
-
-        <ul>
-          <li>Professional service</li>
-          <li>Experienced staff</li>
-          <li>Clean environment</li>
-          <li>Appointment confirmation</li>
-        </ul>
-
-      </div>
-
-      <div class="modal-actions">
-
-        <button
-          type="button"
-          class="cancel-btn"
-          (click)="closeDetails()"
-        >
-          Close
-        </button>
-
-        <!-- <a
-          [routerLink]="['/customer/book']"
-          [queryParams]="{
-            serviceId: selectedService.id
-          }"
-          class="continue-btn"
-          (click)="closeDetails()"
-        >
-          Select Staff & Continue
-        </a> -->
-
+      <div>
+        <span>Price</span>
+        <strong>
+          ₹{{ selectedService.price }}
+        </strong>
       </div>
 
     </div>
 
+    <div class="included">
+
+      <h3>What's included?</h3>
+
+      <ul>
+        <li>Professional service</li>
+        <li>Experienced staff</li>
+        <li>Clean environment</li>
+        <li>Appointment confirmation</li>
+      </ul>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button type="button" class="cancel-btn" (click)="closeDetails()">
+        Close
+      </button>
+
+      <a class="continue-btn" (click)="selectStaffAndContinue()">
+        Select Staff & Continue
+      </a>
+    </div>
+
   </div>
+
+</div>
 
 }

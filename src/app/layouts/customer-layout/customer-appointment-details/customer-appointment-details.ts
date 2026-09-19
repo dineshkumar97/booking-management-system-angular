@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomerService } from '../customer-service';
+import { ToastService } from '../../../toast/toast-service';
 
 interface Appointment {
   id: string;
@@ -22,24 +24,16 @@ interface Appointment {
 export class CustomerAppointmentDetails implements OnInit {
 
   appointmentId = '';
-showCancelDialog = false;
+  showCancelDialog = false;
 
-  appointment: Appointment = {
-    id: 'APT001',
-    serviceName: 'Hair Cut',
-    staffName: 'John',
-    appointmentDate: '20 Sep 2026',
-    startTime: '10:00 AM',
-    endTime: '10:30 AM',
-    price: 500,
-    status: 'CONFIRMED',
-    notes: 'Regular haircut'
-  };
+  appointment: any;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    private customerService: CustomerService,
+    private toast: ToastService
+  ) { }
 
   ngOnInit(): void {
 
@@ -47,9 +41,20 @@ showCancelDialog = false;
       this.route.snapshot.paramMap.get('id') || '';
 
     console.log('Appointment ID:', this.appointmentId);
-
+    this.getAppointmentAll();
   }
 
+
+  getAppointmentAll(): void {
+    this.customerService.getMyAppointmentsID(this.appointmentId).subscribe({
+      next: (response: any) => {
+        this.appointment = response.data;
+      },
+      error: (error) => {
+      }
+    });
+
+  }
   goBack(): void {
     this.router.navigate([
       '/customer-appointment-list'
@@ -57,17 +62,37 @@ showCancelDialog = false;
   }
 
   openCancelDialog(): void {
-  this.showCancelDialog = true;
-}
+    this.showCancelDialog = true;
+  }
 
-closeCancelDialog(): void {
-  this.showCancelDialog = false;
-}
+  closeCancelDialog(): void {
+    this.showCancelDialog = false;
+  }
 
-confirmCancel(): void {
-  console.log('Cancel appointment:', this.appointment.id);
+  confirmCancel(): void {
+    console.log('Cancel appointment:', this.appointment.id);
 
-  this.showCancelDialog = false;
-}
+    this.showCancelDialog = false;
+  }
+
+  cancelAppointment(): void {
+    if (!this.appointment) {
+      return;
+    }
+    const appointmentId = this.appointment._id;
+    this.customerService
+      .cancelAppointment(appointmentId)
+      .subscribe({
+        next: (response) => {
+          console.log('Cancel response:', response);
+          this.toast.success(response.message)
+          this.appointment.status = 'CANCELLED';
+        },
+        error: (error) => {
+          console.error('Cancel error:', error);
+          this.toast.success(error?.error?.message || 'Failed to cancel appointment.');
+        }
+      });
+  }
 
 }

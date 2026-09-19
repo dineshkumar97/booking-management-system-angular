@@ -1,40 +1,27 @@
 <div class="dashboard">
 
-  <!-- Welcome -->
-
   <div class="welcome-section">
-
     <div>
       <h1>Welcome back, {{ userName }} 👋</h1>
       <p>Manage your appointments easily</p>
     </div>
 
-    <a
-      routerLink="/customer/book"
-      class="book-btn"
-    >
+    <button type="button" class="book-btn" (click)="bookAppointment()">
       + Book Appointment
-    </a>
-
+    </button>
   </div>
 
-
-  <!-- Statistics -->
-
   <div class="stats">
-
     <div class="stat-card">
       <span>Upcoming</span>
       <strong>{{ statistics.upcoming }}</strong>
       <small>Appointments</small>
     </div>
-
     <div class="stat-card">
       <span>Completed</span>
       <strong>{{ statistics.completed }}</strong>
       <small>Appointments</small>
     </div>
-
     <div class="stat-card">
       <span>Cancelled</span>
       <strong>{{ statistics.cancelled }}</strong>
@@ -43,42 +30,36 @@
 
   </div>
 
-
   <!-- Upcoming Appointment -->
 
   <section class="upcoming-section">
-
     <div class="section-header">
       <h2>Upcoming Appointment</h2>
-
-      <a
-        routerLink="/customer/appointments"
-        class="view-all"
-      >
+      <button type="button" class="view-all" (click)="myAppointment()">
         My Appointments
-      </a>
+      </button>
     </div>
 
-
+    @if (upcomingAppointment) {
     <div class="appointment-card">
-
       <div class="appointment-header">
-
-        <h3>
-          {{ upcomingAppointment.service }}
-        </h3>
-
-        <span>
-          {{ upcomingAppointment.status }}
-        </span>
-
+        <div>
+          <h3>{{ upcomingAppointment.service }}</h3>
+          <small>#{{ upcomingAppointment.id }}</small>
+        </div>
+      
+        <span class="status" [class.confirmed]="upcomingAppointment.status === 'CONFIRMED'"
+                    [class.pending]="upcomingAppointment.status === 'PENDING'"
+                    [class.completed]="upcomingAppointment.status === 'COMPLETED'"
+                    [class.cancelled]="upcomingAppointment.status === 'CANCELLED'">
+                    {{ upcomingAppointment.status }}
+                </span>
       </div>
-
-
       <div class="appointment-info">
 
         <p>
-          📅 {{ upcomingAppointment.date }}
+          📅
+          {{ upcomingAppointment.date | date:'dd MMM yyyy' }}
         </p>
 
         <p>
@@ -95,29 +76,35 @@
 
       </div>
 
+      @if (upcomingAppointment.status === 'PENDING') {
 
       <div class="actions">
 
-        <!-- <a
-          [routerLink]="[
-            '/customer/appointments',
-            upcomingAppointment.id
-          ]"
-          class="view-btn"
-        >
-          View Appointment
-        </a> -->
-
-        <button type="button">
+        <button type="button" class="cancel-btn" (click)="openCancelDialog()">
           Cancel
         </button>
 
       </div>
 
+      }
+
     </div>
 
-  </section>
+    } @else {
 
+    <div class="empty-card">
+
+      <p>No upcoming appointments.</p>
+
+      <button type="button" class="book-btn" (click)="bookAppointment()">
+        Book Appointment
+      </button>
+
+    </div>
+
+    }
+
+  </section>
 
   <!-- Recent Appointments -->
 
@@ -127,40 +114,80 @@
 
       <h2>Recent Appointments</h2>
 
-      <a
-        routerLink="/customer/appointments"
-        class="view-all"
-      >
+      <button type="button" class="view-all" (click)="myAppointment()">
         View All
-      </a>
+      </button>
 
     </div>
 
+    @if (recentAppointments.length > 0) {
+    <div class="recent-list">
+     @for (appointment of recentAppointments; track appointment._id) {
 
-    @for (appointment of recentAppointments; track appointment.id) {
+  <div class="recent-row">
 
-      <div class="recent-row">
+    <div class="recent-service">
+      <strong>{{ appointment.serviceId?.name }}</strong>
+      <small>{{ appointment.staffId?.name }}</small>
+    </div>
 
-        <span>
-          {{ appointment.service }}
-        </span>
+    <div class="recent-date">
+      {{ appointment.appointmentDate | date:'dd MMM yyyy' }}
+    </div>
 
-        <span>
-          {{ appointment.date }}
-        </span>
+    <div class="recent-time">
+      {{ appointment.startTime }}
+    </div>
 
-        <span>
-          {{ appointment.staff }}
-        </span>
+    <div class="recent-status">
+      <span class="status">
+        {{ appointment.status }}
+      </span>
+    </div>
 
-        <span>
-          {{ appointment.status }}
-        </span>
+  </div>
 
-      </div>
-
+}
+    </div>
+    } @else {
+    <div class="empty-card">
+      <p>No appointments found.</p>
+    </div>
     }
-
   </section>
+</div>
+
+
+<!-- Cancel Confirmation Dialog -->
+
+@if (showCancelDialog) {
+<div class="dialog-overlay" (click)="closeCancelDialog()">
+  <div class="confirmation-dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-icon">
+      !
+    </div>
+    <h2>
+      Cancel Appointment?
+    </h2>
+    <p>
+      Are you sure you want to cancel this appointment?
+    </p>
+    <div class="dialog-actions">
+      <button type="button" class="no-btn" (click)="closeCancelDialog()">
+        No
+      </button>
+      <button type="button" class="yes-cancel-btn" [disabled]="cancelLoading" (click)="cancelAppointment()">
+        @if (cancelLoading) {
+        Cancelling...
+        } @else {
+        Yes, Cancel
+        }
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
+
+}

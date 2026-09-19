@@ -63,6 +63,9 @@ export const routes: Routes = [
       },
       {
         path: 'customer-appointment-details/:id',
+        data: {
+          renderMode: 'client'
+        },
         loadComponent: () =>
           import('./layouts/customer-layout/customer-appointment-details/customer-appointment-details')
             .then(m => m.CustomerAppointmentDetails)

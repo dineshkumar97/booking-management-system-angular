@@ -317,3 +317,165 @@
     border: 1px solid #fecaca;
   }
 }
+
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+}
+
+.confirmation-dialog {
+  width: 400px;
+  max-width: calc(100% - 40px);
+
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  h2 {
+    margin: 15px 0 8px;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 25px;
+  }
+}
+
+.dialog-icon {
+  width: 45px;
+  height: 45px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fee2e2;
+  color: #dc2626;
+
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.no-btn,
+.yes-cancel-btn {
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.no-btn {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+}
+
+.yes-cancel-btn {
+  border: 1px solid #dc2626;
+  background: #dc2626;
+  color: white;
+}
+
+.recent-list {
+  width: 100%;
+}
+
+.recent-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.recent-service {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.recent-service strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-service small {
+  font-size: 13px;
+  color: #777;
+}
+
+.recent-date,
+.recent-time {
+  font-size: 14px;
+  color: #555;
+}
+
+.recent-status {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.completed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}

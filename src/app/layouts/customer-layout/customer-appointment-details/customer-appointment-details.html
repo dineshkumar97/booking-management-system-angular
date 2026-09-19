@@ -19,7 +19,7 @@
         <div class="card-header">
 
             <div>
-                <h2>{{ appointment.serviceName }}</h2>
+                <h2>{{ appointment?.serviceId.name }}</h2>
 
                 <span class="appointment-id">
                     Appointment ID: {{ appointment.id }}
@@ -40,12 +40,12 @@
 
             <div class="detail-item">
                 <span>Service</span>
-                <strong>{{ appointment.serviceName }}</strong>
+                <strong>{{ appointment?.serviceId.name }}</strong>
             </div>
 
             <div class="detail-item">
                 <span>Staff</span>
-                <strong>{{ appointment.staffName }}</strong>
+                <strong>{{ appointment?.staffId.name }}</strong>
             </div>
 
             <div class="detail-item">
@@ -65,7 +65,7 @@
 
             <div class="detail-item">
                 <span>Price</span>
-                <strong>₹{{ appointment.price }}</strong>
+                <strong>₹{{ appointment?.serviceId?.price }}</strong>
             </div>
 
         </div>
@@ -122,7 +122,7 @@
                 No
             </button>
 
-            <button type="button" class="yes-cancel-btn" (click)="confirmCancel()">
+            <button type="button" class="yes-cancel-btn" (click)="cancelAppointment()">
                 Yes, Cancel
             </button>
 

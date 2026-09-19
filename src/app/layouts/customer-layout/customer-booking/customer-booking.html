@@ -73,12 +73,12 @@
 
       <div class="staff-grid">
 
-        @for (staff of staffs; track staff.id) {
+        @for (staff of staffList; track staff?._id) {
 
           <div
             class="staff-card"
-            [class.selected]="selectedStaffId === staff.id"
-            (click)="selectStaff(staff.id)"
+            [class.selected]="staffselectBox === staff?._id"
+            (click)="selectStaff(staff)"
           >
 
             <div class="staff-avatar">
@@ -93,13 +93,13 @@
               </h3>
 
               <p>
-                {{ staff.role }}
+                {{ staff.designation }}
               </p>
 
             </div>
 
 
-            @if (selectedStaffId === staff.id) {
+            @if (staffselectBox === staff?._id) {
 
               <div class="selected-icon">
                 ✓
