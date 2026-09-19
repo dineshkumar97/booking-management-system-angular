@@ -1,7 +1,7 @@
 import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { LoginService } from '../../pages/login/login-service';
+import { LoginService } from '../../auth/login/login-service';
 
 interface MenuItem {
   label: string;

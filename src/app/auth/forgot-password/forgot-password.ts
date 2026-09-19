@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   FormGroup
 } from '@angular/forms';
-import { LoginService } from '../login/login-service';
+import { LoginService } from '../../auth/login/login-service';
 import { ToastService } from '../../toast/toast-service';
 
 @Component({

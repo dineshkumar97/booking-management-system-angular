@@ -9,8 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastService } from '../../toast/toast-service';
-import { LoginService } from '../login/login-service';
-
+import { LoginService } from '../../auth/login/login-service';
 @Component({
   selector: 'app-singup',
   imports: [ReactiveFormsModule],

@@ -9,25 +9,25 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./pages/login/login')
+      import('./auth/login/login')
         .then(m => m.Login)
   },
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import('./pages/forgot-password/forgot-password')
+      import('./auth/forgot-password/forgot-password')
         .then(m => m.ForgotPassword)
   },
   {
     path: 'reset-password',
     loadComponent: () =>
-      import('./pages/reset-page/reset-page')
+      import('./auth/reset-page/reset-page')
         .then(m => m.ResetPage)
   },
   {
     path: 'signup',
     loadComponent: () =>
-      import('./pages/singup/singup')
+      import('./auth/singup/singup')
         .then(m => m.Singup)
   },
   {
