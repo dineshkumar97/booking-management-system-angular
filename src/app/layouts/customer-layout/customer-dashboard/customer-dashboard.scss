@@ -479,3 +479,39 @@
   background: #fee2e2;
   color: #991b1b;
 }
+
+.recent-status {
+  .status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  .confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .completed {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .rejected {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  .cancelled {
+    background: #f8d7da;
+    color: #721c24;
+  }
+}

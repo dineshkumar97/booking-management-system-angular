@@ -83,7 +83,7 @@ export class CustomerBooking implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private customerService: CustomerService,
-    private router:Router,
+    private router: Router,
     private toastService: ToastService
   ) { }
 
@@ -149,7 +149,7 @@ export class CustomerBooking implements OnInit {
   // Selection Methods
   // =========================
 
- staffselectBox: string | undefined;
+  staffselectBox: string | undefined;
   selectStaff(staffId: any): void {
     this.staffselectBox = staffId?._id
     this.selectedStaffId = staffId;
@@ -240,6 +240,10 @@ export class CustomerBooking implements OnInit {
         this.toastService.error(error?.error?.message);
       }
     });
+  }
+
+  goToServices(): void {
+    this.router.navigate(['/customer-service-list']);
   }
 
 }
