@@ -62,7 +62,7 @@ export interface AppointmentResponse {
 export class CustomerService {
   private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
- private http = inject(HttpClient);
+  private http = inject(HttpClient);
   constructor() { }
 
   public createService(data: any): Observable<serverResponse> {
@@ -88,8 +88,8 @@ export class CustomerService {
     return this.http.post<any>(`${this.apiUrl}/appointments/create`, data);
   }
 
- 
- getMyAppointments(): Observable<any[]> {
+
+  getMyAppointments(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/all`);
   }
 
@@ -101,7 +101,30 @@ export class CustomerService {
     return this.http.patch<any>(`${this.apiUrl}/booking/${id}/cancel`, {});
   }
 
+  getStaffAppointments(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/appointments/staffAppointment`);
+  }
+  getStaffAppointmentsID(id: any): Observable<AppointmentResponse> {
+    return this.http.get<AppointmentResponse>(`${this.apiUrl}/appointments/staff/${id}`);
+  }
+  confirmStaffAppointment(id: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/appointments/staff/${id}/confirm`,
+      {}
+    );
+  }
 
+  rejectStaffAppointment(id: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/appointments/staff/${id}/reject`,
+      {});
+  }
+
+  completeStaffAppointment(id: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/appointments/staff/${id}/complete`,
+      {});
+  }
 }
 
 

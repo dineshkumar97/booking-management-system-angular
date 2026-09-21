@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer-service';
 import { ToastService } from '../../../toast/toast-service';
 interface Staff {
@@ -83,6 +83,7 @@ export class CustomerBooking implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private customerService: CustomerService,
+    private router: Router,
     private toastService: ToastService
   ) { }
 
@@ -148,7 +149,7 @@ export class CustomerBooking implements OnInit {
   // Selection Methods
   // =========================
 
- staffselectBox: string | undefined;
+  staffselectBox: string | undefined;
   selectStaff(staffId: any): void {
     this.staffselectBox = staffId?._id
     this.selectedStaffId = staffId;
@@ -233,11 +234,16 @@ export class CustomerBooking implements OnInit {
     this.customerService.createAppointment(booking).subscribe({
       next: (response: any) => {
         this.toastService.success(response.message);
+        this.router.navigate(['/customer-dashboard'])
       },
       error: (error) => {
         this.toastService.error(error?.error?.message);
       }
     });
+  }
+
+  goToServices(): void {
+    this.router.navigate(['/customer-service-list']);
   }
 
 }

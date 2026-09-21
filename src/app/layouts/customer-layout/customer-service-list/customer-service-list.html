@@ -18,8 +18,8 @@
 
     <span>🔍</span>
 
-    <input type="text" placeholder="Search services..." [(ngModel)]="searchText" />
-
+    <input type="text" placeholder="Search services..." [ngModel]="searchText()"
+      (ngModelChange)="onSearchChange($event)" />
   </div>
 
 
@@ -27,7 +27,7 @@
 
   <div class="service-grid">
 
-    @for (service of filteredServices; track service?._id) {
+    @for (service of filteredServices(); track service?._id) {
 
     <div class="service-card">
 
@@ -72,17 +72,21 @@
 
   <!-- Empty -->
 
-  @if (filteredServices?.length === 0) {
+  @if (filteredServices().length === 0) {
 
   <div class="empty-state">
+
     <h3>No services found</h3>
+
     <p>Try another service name.</p>
+
   </div>
 
   }
 
 </div>
-@if (selectedService) {
+
+@if (selectedService()) {
 
 <div class="modal-overlay" (click)="closeDetails()">
 
@@ -92,16 +96,12 @@
       ✕
     </button>
 
-    <div class="modal-icon">
-      ✂️
-    </div>
+    <div class="modal-icon">✂️</div>
 
-    <h2>
-      {{ selectedService.name }}
-    </h2>
+    <h2>{{ selectedService()?.name }}</h2>
 
     <p class="modal-description">
-      {{ selectedService.description }}
+      {{ selectedService()?.description }}
     </p>
 
     <div class="modal-info">
@@ -109,14 +109,14 @@
       <div>
         <span>Duration</span>
         <strong>
-          {{ selectedService.duration }} minutes
+          {{ selectedService()?.duration }} minutes
         </strong>
       </div>
 
       <div>
         <span>Price</span>
         <strong>
-          ₹{{ selectedService.price }}
+          ₹{{ selectedService()?.price }}
         </strong>
       </div>
 
@@ -144,6 +144,7 @@
       <a class="continue-btn" (click)="selectStaffAndContinue()">
         Select Staff & Continue
       </a>
+
     </div>
 
   </div>

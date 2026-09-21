@@ -1,0 +1,246 @@
+.appointment-details {
+  padding: 24px;
+}
+
+
+// Header
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+
+// Back Button
+
+.back-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
+
+// Details Card
+
+.details-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+
+// Card Header
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+  }
+}
+
+
+// Status
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+
+  &.completed {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  &.rejected {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  &.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+  }
+}
+
+.complete-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+
+// Details Grid
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 24px 0;
+}
+
+
+// Detail Item
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+.label {
+  font-size: 13px;
+  color: #777;
+}
+
+
+.value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+}
+
+
+// Actions
+
+.actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+
+.confirm-btn,
+.reject-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.confirm-btn {
+  background: #198754;
+  color: #fff;
+
+  &:hover {
+    background: #157347;
+  }
+}
+
+
+.reject-btn {
+  background: #dc3545;
+  color: #fff;
+
+  &:hover {
+    background: #bb2d3b;
+  }
+}
+
+
+// Mobile
+
+@media (max-width: 768px) {
+
+  .appointment-details {
+    padding: 16px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 576px) {
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .back-btn {
+    width: 100%;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .confirm-btn,
+  .reject-btn {
+    width: 100%;
+  }
+
+}

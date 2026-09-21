@@ -89,7 +89,7 @@ export class Profile implements OnInit {
           this.toastService.success(response.message);
           this.isEditMode = false;
           this.getProfile();
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/custom-dashboard']);
         },
         error: (error) => {
           this.toastService.error(

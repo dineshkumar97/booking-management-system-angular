@@ -7,8 +7,9 @@
                     <th>S.no</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
+                    <th>role</th>
+                    <th>designation</th>
+                    <!-- <th>Updated At</th> -->
                 </tr>
 
             </thead>
@@ -18,8 +19,9 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ user?.name }}</td>
                 <td>{{ user?.email }}</td>
-                <td>{{ user.createdAt | commonDate }}</td>
-                <td>{{ user.updatedAt | commonDate }}</td>
+                <td>{{ user.role  }}</td>
+                <td>{{ user.designation  }}</td>
+                <!-- <td>{{ user.updatedAt | commonDate }}</td> -->
             </tr>
             }
 

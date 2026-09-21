@@ -1,7 +1,8 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { LoginService } from '../../auth/login/login-service';
+import { isPlatformBrowser } from '@angular/common';
 
 interface MenuItem {
   label: string;
@@ -30,25 +31,24 @@ export class MainLayout implements OnInit {
 
   userName = signal('');
   profileImage = '';
+  private platformId = inject(PLATFORM_ID);
 
   constructor(private router: Router, private loginService: LoginService) {
-    effect(() => {
-      const user = this.loginService.userDetails();
-      this.userName.set(user?.name || '');
-      this.profileImage = user?.profileImage || '';
-    });
-
-
   }
 
+
+  menuItems = signal<MenuItem[]>([]);
   ngOnInit(): void {
-    if (this.router.url === '/employee') {
-      this.activeMenu.set('Employees');
-    } else if (this.router.url === '/departments') {
-      this.activeMenu.set('Departments');
-    } else if (this.router.url === '/dashboard') {
-      this.activeMenu.set('Dashboard');
-    }
+
+    // if (this.router.url === '/customer-service-list') {
+    //   this.activeMenu.set('Service List');
+    // } else if (this.router.url === '/customer-booking-list') {
+    //   this.activeMenu.set('Booking');
+    // } else if (this.router.url === '/customer-dashboard') {
+    //   this.activeMenu.set('Dashboard');
+    // } else if (this.router.url === '/customer-appointment-list') {
+    //   this.activeMenu.set('Appointment');
+    // }
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd)
@@ -56,43 +56,152 @@ export class MainLayout implements OnInit {
       .subscribe(() => {
         this.updateActiveMenu();
       });
-  }
 
+    const user = this.getUser();
+    if (user?.role === 'CUSTOMER') {
+
+      this.menuItems.set([
+        {
+          label: 'Dashboard',
+          icon: '📊',
+          route: '/customer-dashboard'
+        },
+        {
+          label: 'Service List',
+          icon: '👥',
+          route: '/customer-service-list'
+        },
+        {
+          label: 'Booking',
+          icon: '🏢',
+          route: '/customer-booking-list'
+        },
+        //   {
+        //   label: 'Users',
+        //   icon: '📊',
+        //   route: '/users'
+        // },
+        {
+          label: 'Appointment',
+          icon: '📅',
+          route: '/customer-appointment-list'
+        }
+      ]);
+
+    } else if (user?.role === 'STAFF') {
+
+      this.menuItems.set([
+        {
+          label: 'Dashboard',
+          icon: '📊',
+          route: '/staff-dashboard'
+        },
+        //  {
+        //   label: 'Users',
+        //   icon: '📊',
+        //   route: '/users'
+        // },
+        {
+          label: 'Appointments',
+          icon: '📅',
+          route: '/staff-appointments'
+        }]);
+    } else if (user?.role === 'ADMIN') {
+
+      this.menuItems.set([
+        {
+          label: 'Dashboard',
+          icon: '📊',
+          route: '/admin-dashboard'
+        },
+        //   {
+        //   label: 'Users',
+        //   icon: '📊',
+        //   route: '/users'
+        // },
+        // {
+        //   label: 'Users',
+        //   icon: '👥',
+        //   route: '/admin-users'
+        // },
+        {
+          label: 'Services',
+          icon: '🛠️',
+          route: '/admin-services'
+        },
+        {
+          label: 'Staff',
+          icon: '👨‍💼',
+          route: '/admin-staff'
+        },
+        {
+          label: 'Appointments',
+          icon: '📅',
+          route: '/admin-appointments'
+        }
+      ]);
+    }
+
+    this.setActiveMenu();
+
+  }
+  setActiveMenu(): void {
+    const currentUrl = this.router.url;
+    const menu = this.menuItems().find(
+      item => item.route === currentUrl
+    );
+    if (menu) {
+      this.activeMenu.set(menu.label);
+    }
+  }
   private updateActiveMenu(): void {
-    const menuMap: Record<string, string> = {
-      '/dashboard': 'Dashboard',
-      '/employee': 'Employees',
-      '/departments': 'Departments'
-    };
-
-    this.activeMenu.set(menuMap[this.router.url] ?? 'Dashboard');
+    const menu = this.menuItems().find(
+      item => item.route === this.router.url
+    );
+    this.activeMenu.set(
+      menu?.label ?? 'Dashboard'
+    );
   }
-
-
-  // userName = 'Dinesh';
-
-  // isDropdownOpen = signal(false);
-
-  // ============================
-  // SIDEBAR
-  // ============================
-
-  menuItems = signal<MenuItem[]>([
-    { label: 'Dashboard', icon: '📊', route: '/customer-dashboard' },
-    { label: 'Service List', icon: '👥', route: '/customer-service-list' },
-    { label: 'Booking', icon: '🏢', route: '/customer-booking-list' },
-    { label: 'Appointment', icon: '🏢', route: '/customer-appointment-list' },
-    // { label: 'Projects', icon: '📋', route: '/projects' },
-    // { label: 'Inventory', icon: '📋', route: '/inventory' },
-    // { label: 'Orders', icon: '🛒', route: '/orders' },
-    // { label: 'Suppliers', icon: '🚚', route: '/suppliers' },
-    // { label: 'Reports', icon: '📈', route: '/reports' },
-    // { label: 'Settings', icon: '⚙️', route: '/settings' }
-  ]);
-
   selectMenu(menu: any) {
     this.activeMenu.set(menu.label);
   }
+  getUser(): any {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    const userDetails = sessionStorage.getItem('user_details');
+    if (!userDetails) {
+      return null;
+    }
+    const user = JSON.parse(userDetails);
+    console.log('sk', user)
+
+    if (user?._id) {
+      this.getProfile(user._id);
+    }
+
+    return user;
+  }
+
+  getProfile(userId: string): void {
+    this.loginService.getProfile(userId).subscribe({
+      next: (response: any) => {
+        const user = response.data;
+        if (user.name) {
+          this.userName.set(user?.name || '');
+          this.profileImage = user?.profileImage || '';
+          this.loginService.setUser(response.data);
+          console.log(this.userName())
+        }
+      },
+
+      error: (error) => {
+        console.error('Get profile failed:', error);
+      }
+    });
+  }
+
+
   // ============================
   // DASHBOARD STATISTICS
   // ============================

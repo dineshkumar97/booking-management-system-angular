@@ -50,8 +50,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
       const jwt = window.sessionStorage.getItem('authToken');
 
-      console.log('JWT:', jwt);
-
       // Check if request is FormData
       if (req.body instanceof FormData) {
 
@@ -90,9 +88,6 @@ export class AuthInterceptor implements HttpInterceptor {
           isPlatformBrowser(this.platformId) &&
           (error.status === 401 || error.status === 403)
         ) {
-
-          console.log('Token missing/expired');
-
           window.sessionStorage.removeItem('authToken');
 
           this.router.navigate(['/login']);

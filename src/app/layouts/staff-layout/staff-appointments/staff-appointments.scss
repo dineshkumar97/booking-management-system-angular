@@ -1,0 +1,135 @@
+.staff-appointments {
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.status-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  button {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    &.active {
+      background: #222;
+      color: #fff;
+      border-color: #222;
+    }
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+}
+
+th {
+  font-weight: 600;
+  background: #f8f8f8;
+}
+
+tbody tr:hover {
+  background: #fafafa;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  &.confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+
+  &.completed {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  &.rejected {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  &.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+  }
+}
+
+.view-btn {
+  border: none;
+  background: #222;
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: #000;
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+}
+
+@media (max-width: 768px) {
+  .staff-appointments {
+    padding: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+}

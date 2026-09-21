@@ -75,35 +75,60 @@ export class Login implements OnInit {
     return /[@$!%*?&]/.test(password);
   }
 
-  public loginDetails(): void {
+public loginDetails(): void {
 
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
+  }
 
-    this.loginService.login(this.loginForm.value).subscribe({
+  this.loginService.login(this.loginForm.value).subscribe({
 
-      next: (response: any) => {
-
-        console.log('Login successful:', response);
-        sessionStorage.setItem('authToken', response.token);
-        sessionStorage.setItem('user_details',JSON.stringify(response.data));
-        this.toastService.success('Login successful');
-        this.router.navigate(['/dashboard']);
-      },
-
-      error: (error) => {
-
-        console.error('Login failed:', error);
-
-        this.toastService.error(
-          error?.error?.message || 'Login failed'
-        );
+    next: (response: any) => {
+      console.log('Login successful:', response);
+      // Store token
+      sessionStorage.setItem(
+        'authToken',
+        response.token
+      );
+      // Store user details including role
+      sessionStorage.setItem(
+        'user_details',
+        JSON.stringify(response.data)
+      );
+      this.toastService.success('Login successful');
+      // Get role
+      const role = response.data?.role;
+      console.log('User role:', role);
+      // Role based navigation
+      if (role === 'CUSTOMER') {
+        this.router.navigate(['/customer-dashboard']);
+      } else if (role === 'STAFF') {
+        this.router.navigate(['/staff-dashboard']);
+      } else if (role === 'ADMIN') {
+        this.router.navigate(['/admin-dashboard']);
+      } else {
+        console.error('Unknown role:', role);
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('user_details');
+        this.toastService.error('Invalid user role');
+        this.router.navigate(['/login']);
       }
 
-    });
-  }
+    },
+
+    error: (error) => {
+
+      console.error('Login failed:', error);
+
+      this.toastService.error(
+        error?.error?.message || 'Login failed'
+      );
+
+    }
+
+  });
+}
 
   goToForgotPassword() {
     this.router.navigate(['/forgot-password']);

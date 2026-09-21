@@ -1,66 +1,58 @@
 <div class="booking-page">
 
-  <!-- ================= HEADER ================= -->
+  @if (serviceId) {
 
-  <div class="page-header">
+  <div class="booking-page">
 
-    <h1>Book Appointment</h1>
+    <!-- ================= HEADER ================= -->
 
-    <p>
-      Select staff, date and time for your appointment
-    </p>
+    <div class="page-header">
 
-  </div>
+      <h1>Book Appointment</h1>
 
+      <p>
+        Select staff, date and time for your appointment
+      </p>
 
-  <!-- ================= PROGRESS ================= -->
-
-  <div class="steps">
-
-    <div
-      class="step"
-      [class.active]="currentStep >= 1"
-    >
-      <span>1</span>
-      <label>Staff</label>
     </div>
 
-    <div class="line"></div>
 
-    <div
-      class="step"
-      [class.active]="currentStep >= 2"
-    >
-      <span>2</span>
-      <label>Date</label>
+    <!-- ================= PROGRESS ================= -->
+
+    <div class="steps">
+
+      <div class="step" [class.active]="currentStep >= 1">
+        <span>1</span>
+        <label>Staff</label>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step" [class.active]="currentStep >= 2">
+        <span>2</span>
+        <label>Date</label>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step" [class.active]="currentStep >= 3">
+        <span>3</span>
+        <label>Time</label>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="step" [class.active]="currentStep >= 4">
+        <span>4</span>
+        <label>Confirm</label>
+      </div>
+
     </div>
 
-    <div class="line"></div>
 
-    <div
-      class="step"
-      [class.active]="currentStep >= 3"
-    >
-      <span>3</span>
-      <label>Time</label>
-    </div>
+    <!-- ================= STEP 1 ================= -->
 
-    <div class="line"></div>
-
-    <div
-      class="step"
-      [class.active]="currentStep >= 4"
-    >
-      <span>4</span>
-      <label>Confirm</label>
-    </div>
-
-  </div>
-
-
-  <!-- ================= STEP 1 ================= -->
-
-  @if (currentStep === 1) {
+    @if (currentStep === 1) {
 
     <section class="staff-section">
 
@@ -75,39 +67,35 @@
 
         @for (staff of staffList; track staff?._id) {
 
-          <div
-            class="staff-card"
-            [class.selected]="staffselectBox === staff?._id"
-            (click)="selectStaff(staff)"
-          >
+        <div class="staff-card" [class.selected]="staffselectBox === staff?._id" (click)="selectStaff(staff)">
 
-            <div class="staff-avatar">
-              {{ staff.name.charAt(0) }}
-            </div>
+          <div class="staff-avatar">
+            {{ staff.name.charAt(0) }}
+          </div>
 
 
-            <div class="staff-info">
+          <div class="staff-info">
 
-              <h3>
-                {{ staff.name }}
-              </h3>
+            <h3>
+              {{ staff.name }}
+            </h3>
 
-              <p>
-                {{ staff.designation }}
-              </p>
-
-            </div>
-
-
-            @if (staffselectBox === staff?._id) {
-
-              <div class="selected-icon">
-                ✓
-              </div>
-
-            }
+            <p>
+              {{ staff.designation }}
+            </p>
 
           </div>
+
+
+          @if (staffselectBox === staff?._id) {
+
+          <div class="selected-icon">
+            ✓
+          </div>
+
+          }
+
+        </div>
 
         }
 
@@ -116,12 +104,7 @@
 
       <div class="actions">
 
-        <button
-          type="button"
-          class="continue-btn"
-          [disabled]="!canContinue()"
-          (click)="nextStep()"
-        >
+        <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
 
@@ -129,12 +112,12 @@
 
     </section>
 
-  }
+    }
 
 
-  <!-- ================= STEP 2 ================= -->
+    <!-- ================= STEP 2 ================= -->
 
-  @if (currentStep === 2) {
+    @if (currentStep === 2) {
 
     <section class="staff-section">
 
@@ -149,20 +132,15 @@
 
         @for (date of availableDates; track date) {
 
-          <button
-            type="button"
-            class="date-card"
-            [class.selected]="selectedDate === date"
-            (click)="selectDate(date)"
-          >
+        <button type="button" class="date-card" [class.selected]="selectedDate === date" (click)="selectDate(date)">
 
-            {{ date }}
+          {{ date }}
 
-            @if (selectedDate === date) {
-              <span>✓</span>
-            }
+          @if (selectedDate === date) {
+          <span>✓</span>
+          }
 
-          </button>
+        </button>
 
         }
 
@@ -171,21 +149,12 @@
 
       <div class="actions">
 
-        <button
-          type="button"
-          class="back-btn"
-          (click)="previousStep()"
-        >
+        <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
 
 
-        <button
-          type="button"
-          class="continue-btn"
-          [disabled]="!canContinue()"
-          (click)="nextStep()"
-        >
+        <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
 
@@ -193,12 +162,12 @@
 
     </section>
 
-  }
+    }
 
 
-  <!-- ================= STEP 3 ================= -->
+    <!-- ================= STEP 3 ================= -->
 
-  @if (currentStep === 3) {
+    @if (currentStep === 3) {
 
     <section class="staff-section">
 
@@ -213,20 +182,15 @@
 
         @for (time of availableTimeSlots; track time) {
 
-          <button
-            type="button"
-            class="time-card"
-            [class.selected]="selectedTime === time"
-            (click)="selectTime(time)"
-          >
+        <button type="button" class="time-card" [class.selected]="selectedTime === time" (click)="selectTime(time)">
 
-            {{ time }}
+          {{ time }}
 
-            @if (selectedTime === time) {
-              <span>✓</span>
-            }
+          @if (selectedTime === time) {
+          <span>✓</span>
+          }
 
-          </button>
+        </button>
 
         }
 
@@ -235,21 +199,12 @@
 
       <div class="actions">
 
-        <button
-          type="button"
-          class="back-btn"
-          (click)="previousStep()"
-        >
+        <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
 
 
-        <button
-          type="button"
-          class="continue-btn"
-          [disabled]="!canContinue()"
-          (click)="nextStep()"
-        >
+        <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
 
@@ -257,12 +212,12 @@
 
     </section>
 
-  }
+    }
 
 
-  <!-- ================= STEP 4 ================= -->
+    <!-- ================= STEP 4 ================= -->
 
-  @if (currentStep === 4) {
+    @if (currentStep === 4) {
 
     <section class="confirm-section">
 
@@ -344,26 +299,38 @@
 
       <div class="actions">
 
-        <button
-          type="button"
-          class="back-btn"
-          (click)="previousStep()"
-        >
+        <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
 
 
-        <button
-          type="button"
-          class="continue-btn"
-          (click)="confirmBooking()"
-        >
+        <button type="button" class="continue-btn" (click)="confirmBooking()">
           Confirm Booking
         </button>
 
       </div>
 
     </section>
+
+    }
+
+  </div>
+
+  } @else {
+
+  <div class="no-service">
+
+    <h2>Service Not Selected</h2>
+
+    <p>
+      Please select a service before booking an appointment.
+    </p>
+
+    <button type="button" class="back-btn" (click)="goToServices()">
+      Back to Services
+    </button>
+
+  </div>
 
   }
 
