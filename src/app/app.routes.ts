@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',
@@ -39,30 +39,35 @@ export const routes: Routes = [
     children: [
       {
         path: 'customer-dashboard',
+         canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-dashboard/customer-dashboard')
             .then(m => m.CustomerDashboard)
       },
       {
         path: 'customer-service-list',
+         canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-service-list/customer-service-list')
             .then(m => m.CustomerServiceList)
       },
       {
         path: 'customer-booking-list',
+         canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-booking/customer-booking')
             .then(m => m.CustomerBooking)
       },
       {
         path: 'customer-appointment-list',
+         canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-appointments-list/customer-appointments-list')
             .then(m => m.CustomerAppointmentsList)
       },
       {
         path: 'customer-appointment-details/:id',
+         canActivate: [authGuard],
         data: {
           renderMode: 'client'
         },
@@ -97,6 +102,7 @@ export const routes: Routes = [
 
       {
         path: 'profile',
+         canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/profile/profile')
             .then(m => m.Profile)
