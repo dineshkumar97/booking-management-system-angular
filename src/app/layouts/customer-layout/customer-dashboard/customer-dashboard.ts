@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { CustomerService } from '../customer-service';
@@ -29,7 +29,8 @@ export class CustomerDashboard implements OnInit {
 
   constructor(
     private router: Router,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +47,18 @@ export class CustomerDashboard implements OnInit {
 
       next: (response: any) => {
 
+        console.log('Customer Appointments Response:', response);
+
         const appointments = response?.data || [];
+
+        console.log(
+          'Customer Appointments Data:',
+          appointments
+        );
+
+        // =========================
+        // RECENT APPOINTMENTS
+        // =========================
 
         this.recentAppointments = appointments;
 
@@ -86,6 +98,15 @@ export class CustomerDashboard implements OnInit {
               new Date(b.appointmentDate).getTime()
           );
 
+        console.log(
+          'Upcoming Appointments:',
+          upcoming
+        );
+
+        // =========================
+        // SET UPCOMING APPOINTMENT
+        // =========================
+
         if (upcoming.length > 0) {
 
           const appointment = upcoming[0];
@@ -99,11 +120,33 @@ export class CustomerDashboard implements OnInit {
             staff: appointment.staffId?.name || '',
             price: appointment.serviceId?.price || 0
           };
+
         } else {
 
           this.upcomingAppointment = null;
 
         }
+
+        console.log(
+          'Statistics:',
+          this.statistics
+        );
+
+        console.log(
+          'Upcoming Appointment:',
+          this.upcomingAppointment
+        );
+
+        console.log(
+          'Recent Appointments:',
+          this.recentAppointments
+        );
+
+        // =========================
+        // FIX NG0100
+        // =========================
+
+        this.cdr.detectChanges();
 
       },
 
@@ -113,6 +156,20 @@ export class CustomerDashboard implements OnInit {
           'Failed to load appointments:',
           error
         );
+
+        // Reset data when API fails
+
+        this.recentAppointments = [];
+
+        this.upcomingAppointment = null;
+
+        this.statistics = {
+          upcoming: 0,
+          completed: 0,
+          cancelled: 0
+        };
+
+        this.cdr.detectChanges();
 
       }
 
@@ -157,6 +214,7 @@ export class CustomerDashboard implements OnInit {
       );
 
       return;
+
     }
 
     this.showCancelDialog = true;
@@ -185,8 +243,6 @@ export class CustomerDashboard implements OnInit {
 
     const appointmentId =
       this.upcomingAppointment?.id;
-
-    
 
     if (!appointmentId) {
 
@@ -228,6 +284,8 @@ export class CustomerDashboard implements OnInit {
           );
 
           this.cancelLoading = false;
+
+          this.cdr.detectChanges();
 
         }
 

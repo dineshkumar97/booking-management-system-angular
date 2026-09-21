@@ -1,0 +1,185 @@
+<div class="staff-appointments">
+
+  <div class="page-header">
+    <div>
+      <h1>Appointments</h1>
+      <p>Manage customer appointments.</p>
+    </div>
+  </div>
+
+
+  <!-- Status Filter -->
+
+  <div class="status-tabs">
+
+    <button
+      [class.active]="selectedStatus() === 'ALL'"
+      (click)="selectStatus('ALL')">
+
+      All
+
+    </button>
+
+
+    <button
+      [class.active]="selectedStatus() === 'PENDING'"
+      (click)="selectStatus('PENDING')">
+
+      Pending
+
+    </button>
+
+
+    <button
+      [class.active]="selectedStatus() === 'CONFIRMED'"
+      (click)="selectStatus('CONFIRMED')">
+
+      Confirmed
+
+    </button>
+
+
+    <button
+      [class.active]="selectedStatus() === 'COMPLETED'"
+      (click)="selectStatus('COMPLETED')">
+
+      Completed
+
+    </button>
+
+
+    <button
+      [class.active]="selectedStatus() === 'REJECTED'"
+      (click)="selectStatus('REJECTED')">
+
+      Rejected
+
+    </button>
+
+
+    <button
+      [class.active]="selectedStatus() === 'CANCELLED'"
+      (click)="selectStatus('CANCELLED')">
+
+      Cancelled
+
+    </button>
+
+  </div>
+
+
+  <!-- Appointment Table -->
+
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Service</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Action</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        @for (
+          appointment of filteredAppointments();
+          track $index
+        ) {
+
+          <tr>
+
+            <td>
+              #{{ appointment._id }}
+            </td>
+
+
+            <td>
+              {{ appointment.customerId?.name }}
+            </td>
+
+
+            <td>
+              {{ appointment.serviceId?.name }}
+            </td>
+
+
+            <td>
+              {{ appointment.appointmentDate }}
+            </td>
+
+
+            <td>
+              {{ appointment.startTime }}
+            </td>
+
+
+            <td>
+
+              <span
+                class="status"
+                [class.pending]="appointment.status === 'PENDING'"
+                [class.confirmed]="appointment.status === 'CONFIRMED'"
+                [class.completed]="appointment.status === 'COMPLETED'"
+                [class.rejected]="appointment.status === 'REJECTED'"
+                [class.cancelled]="appointment.status === 'CANCELLED'">
+
+                {{ appointment.status }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <button
+                type="button"
+                class="view-btn"
+                (click)="viewAppointment(appointment._id)">
+
+                View
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+
+        @if (filteredAppointments().length === 0) {
+
+          <tr>
+
+            <td
+              colspan="7"
+              class="no-data">
+
+              No appointments found.
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

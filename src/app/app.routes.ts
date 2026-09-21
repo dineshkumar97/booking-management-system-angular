@@ -117,7 +117,46 @@ export const routes: Routes = [
           import('./layouts/customer-layout/customer-appointment-details/customer-appointment-details')
             .then(m => m.CustomerAppointmentDetails)
       },
-
+      {
+        path: 'staff-dashboard',
+        title: 'BMS | Staff Dashboard',
+        canActivate: [authGuard],
+        data: {
+          roles: ['STAFF']
+        },
+        loadComponent: () =>
+          import('./layouts/staff-layout/staff-dashboard/staff-dashboard')
+            .then(m => m.StaffDashboard)
+      },
+      {
+        path: 'staff-appointments',
+        title: 'BMS | Staff Appointments',
+        canActivate: [authGuard],
+        data: {
+          roles: ['STAFF']
+        },
+        loadComponent: () =>
+          import('./layouts/staff-layout/staff-appointments/staff-appointments')
+            .then(m => m.StaffAppointments)
+      },
+      {
+        path: 'staff-appointment-details/:id',
+        title: 'BMS | Staff Appointment Details',
+        canActivate: [authGuard],
+        data: {
+          roles: ['STAFF'],
+          renderMode: 'client'
+        },
+        loadComponent: () =>
+          import('./layouts/staff-layout/staff-appointment-details/staff-appointment-details')
+            .then(m => m.StaffAppointmentDetails)
+      },
+       {
+        path: 'users',
+        loadComponent: () =>
+          import('./pages/users/users')
+            .then(m => m.Users)
+      },
       // =========================
       // PROFILE
       // Login required only
