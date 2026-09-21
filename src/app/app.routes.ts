@@ -1,35 +1,54 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+
 export const routes: Routes = [
+
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
   },
+
+  // =========================
+  // AUTH
+  // =========================
+
   {
     path: 'login',
+    title: 'BMS | Login',
     loadComponent: () =>
       import('./auth/login/login')
         .then(m => m.Login)
   },
+
   {
     path: 'forgot-password',
+    title: 'BMS | Forgot Password',
     loadComponent: () =>
       import('./auth/forgot-password/forgot-password')
         .then(m => m.ForgotPassword)
   },
+
   {
     path: 'reset-password',
+    title: 'BMS | Reset Password',
     loadComponent: () =>
       import('./auth/reset-page/reset-page')
         .then(m => m.ResetPage)
   },
+
   {
     path: 'signup',
+    title: 'BMS | Sign Up',
     loadComponent: () =>
       import('./auth/singup/singup')
         .then(m => m.Singup)
   },
+
+  // =========================
+  // MAIN LAYOUT
+  // =========================
+
   {
     path: '',
     loadComponent: () =>
@@ -37,37 +56,60 @@ export const routes: Routes = [
         .then(m => m.MainLayout),
 
     children: [
+
+      // =========================
+      // CUSTOMER DASHBOARD
+      // Role restricted
+      // =========================
+
       {
         path: 'customer-dashboard',
-         canActivate: [authGuard],
+        title: 'BMS | Customer Dashboard',
+        canActivate: [authGuard],
+        data: {
+          roles: ['CUSTOMER']
+        },
         loadComponent: () =>
           import('./layouts/customer-layout/customer-dashboard/customer-dashboard')
             .then(m => m.CustomerDashboard)
       },
+
+      // =========================
+      // CUSTOMER PAGES
+      // Login required only
+      // =========================
+
       {
         path: 'customer-service-list',
-         canActivate: [authGuard],
+        title: 'BMS | Services',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-service-list/customer-service-list')
             .then(m => m.CustomerServiceList)
       },
+
       {
         path: 'customer-booking-list',
-         canActivate: [authGuard],
+        title: 'BMS | Booking',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-booking/customer-booking')
             .then(m => m.CustomerBooking)
       },
+
       {
         path: 'customer-appointment-list',
-         canActivate: [authGuard],
+        title: 'BMS | My Appointments',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./layouts/customer-layout/customer-appointments-list/customer-appointments-list')
             .then(m => m.CustomerAppointmentsList)
       },
+
       {
         path: 'customer-appointment-details/:id',
-         canActivate: [authGuard],
+        title: 'BMS | Appointment Details',
+        canActivate: [authGuard],
         data: {
           renderMode: 'client'
         },
@@ -75,42 +117,27 @@ export const routes: Routes = [
           import('./layouts/customer-layout/customer-appointment-details/customer-appointment-details')
             .then(m => m.CustomerAppointmentDetails)
       },
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./pages/dashboard/dashboard')
-            .then(m => m.Dashboard)
-      },
-      {
-        path: 'users',
-        loadComponent: () =>
-          import('./pages/users/users')
-            .then(m => m.Users)
-      },
-      {
-        path: 'employee',
-        loadComponent: () =>
-          import('./pages/employee/employee')
-            .then(m => m.Employee)
-      },
-      {
-        path: 'departments',
-        loadComponent: () =>
-          import('./pages/department/department')
-            .then(m => m.Department)
-      },
+
+      // =========================
+      // PROFILE
+      // Login required only
+      // =========================
 
       {
         path: 'profile',
-         canActivate: [authGuard],
+        title: 'BMS | Profile',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/profile/profile')
             .then(m => m.Profile)
-      },
+      }
 
     ]
   },
 
+  // =========================
+  // INVALID ROUTE
+  // =========================
 
   {
     path: '**',
