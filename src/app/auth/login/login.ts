@@ -90,7 +90,7 @@ export class Login implements OnInit {
         sessionStorage.setItem('authToken', response.token);
         sessionStorage.setItem('user_details',JSON.stringify(response.data));
         this.toastService.success('Login successful');
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/customer-dashboard']);
       },
 
       error: (error) => {

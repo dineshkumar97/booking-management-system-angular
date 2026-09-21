@@ -1,7 +1,8 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { LoginService } from '../../auth/login/login-service';
+import { isPlatformBrowser } from '@angular/common';
 
 interface MenuItem {
   label: string;
@@ -30,24 +31,23 @@ export class MainLayout implements OnInit {
 
   userName = signal('');
   profileImage = '';
+  private platformId = inject(PLATFORM_ID);
 
   constructor(private router: Router, private loginService: LoginService) {
-    effect(() => {
-      const user = this.loginService.userDetails();
-      this.userName.set(user?.name || '');
-      this.profileImage = user?.profileImage || '';
-    });
-
-
   }
 
+
+
   ngOnInit(): void {
-    if (this.router.url === '/employee') {
-      this.activeMenu.set('Employees');
-    } else if (this.router.url === '/departments') {
-      this.activeMenu.set('Departments');
-    } else if (this.router.url === '/dashboard') {
+
+    if (this.router.url === '/customer-service-list') {
+      this.activeMenu.set('Service List');
+    } else if (this.router.url === '/customer-booking-list') {
+      this.activeMenu.set('Booking');
+    } else if (this.router.url === '/customer-dashboard') {
       this.activeMenu.set('Dashboard');
+    }else if (this.router.url === '/customer-appointment-list') {
+      this.activeMenu.set('Appointment');
     }
     this.router.events
       .pipe(
@@ -56,13 +56,52 @@ export class MainLayout implements OnInit {
       .subscribe(() => {
         this.updateActiveMenu();
       });
+      this.getUser();
+
+  }
+
+  getUser(): any {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    const userDetails = sessionStorage.getItem('user_details');
+    if (!userDetails) {
+      return null;
+    }
+    const user = JSON.parse(userDetails);
+    console.log('sk',user)
+
+    if (user?._id) {
+      this.getProfile(user._id);
+    }
+
+    return user;
+  }
+
+    getProfile(userId: string): void {
+    this.loginService.getProfile(userId).subscribe({
+      next: (response: any) => {
+        const user = response.data;
+        if (user.name) {
+          this.userName.set(user?.name || '');
+          this.profileImage = user?.profileImage || '';
+          this.loginService.setUser(response.data);
+          console.log(this.userName())
+        }
+      },
+
+      error: (error) => {
+        console.error('Get profile failed:', error);
+      }
+    });
   }
 
   private updateActiveMenu(): void {
     const menuMap: Record<string, string> = {
-      '/dashboard': 'Dashboard',
-      '/employee': 'Employees',
-      '/departments': 'Departments'
+      '/customer-dashboard': 'Dashboard',
+      '/customer-service-list': 'Service List',
+      '/customer-booking-list': 'Booking',
+      '/customer-appointment-list': 'Appointment'
     };
 
     this.activeMenu.set(menuMap[this.router.url] ?? 'Dashboard');

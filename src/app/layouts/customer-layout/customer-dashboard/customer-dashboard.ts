@@ -46,11 +46,7 @@ export class CustomerDashboard implements OnInit {
 
       next: (response: any) => {
 
-        console.log('API RESPONSE:', response);
-
         const appointments = response?.data || [];
-
-        console.log('APPOINTMENTS:', appointments);
 
         this.recentAppointments = appointments;
 
@@ -103,12 +99,6 @@ export class CustomerDashboard implements OnInit {
             staff: appointment.staffId?.name || '',
             price: appointment.serviceId?.price || 0
           };
-
-          console.log(
-            'UPCOMING APPOINTMENT:',
-            this.upcomingAppointment
-          );
-
         } else {
 
           this.upcomingAppointment = null;
@@ -196,10 +186,7 @@ export class CustomerDashboard implements OnInit {
     const appointmentId =
       this.upcomingAppointment?.id;
 
-    console.log(
-      'Cancel Appointment ID:',
-      appointmentId
-    );
+    
 
     if (!appointmentId) {
 
