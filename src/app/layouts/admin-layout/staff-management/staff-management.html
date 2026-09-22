@@ -1,0 +1,538 @@
+<div class="attention-card">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="users-header">
+
+        <div class="title-section">
+
+            <h2>
+                Staff Management
+            </h2>
+
+            <p>
+                Manage staff members and their assignments
+            </p>
+
+        </div>
+
+
+        <button type="button" class="create-btn" (click)="createStaff()">
+
+            <span>+</span>
+
+            Add Staff
+
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         CREATE / EDIT FORM
+    ========================== -->
+
+    @if (showCreateForm()) {
+
+    <div class="user-form-card">
+
+        <div class="form-header">
+
+            <div>
+
+                <h3>
+                    {{
+                    isEditMode()
+                    ? 'Edit Staff'
+                    : 'Create Staff'
+                    }}
+                </h3>
+
+                <p>
+                    {{
+                    isEditMode()
+                    ? 'Update staff information'
+                    : 'Enter staff information'
+                    }}
+                </p>
+
+            </div>
+
+
+            <button type="button" class="close-btn" (click)="closeForm()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form [formGroup]="staffForm" (ngSubmit)="submitStaff()">
+
+            <div class="form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Name
+                    </label>
+
+                    <input type="text" formControlName="name" placeholder="Enter name">
+
+
+                    @if (
+                    staffForm.get('name')?.touched &&
+                    staffForm.get('name')?.invalid
+                    ) {
+
+                    <small>
+                        Name is required
+                    </small>
+
+                    }
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input type="email" formControlName="email" placeholder="Enter email">
+
+
+                    @if (
+                    staffForm.get('email')?.touched &&
+                    staffForm.get('email')?.invalid
+                    ) {
+
+                    <small>
+                        Enter a valid email
+                    </small>
+
+                    }
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input type="text" formControlName="phone" maxlength="10" placeholder="Enter phone number">
+
+                </div>
+
+
+                <!-- DESIGNATION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Designation
+                    </label>
+
+                    <input type="text" formControlName="designation" placeholder="Enter designation">
+
+
+                    @if (
+                    staffForm.get('designation')?.touched &&
+                    staffForm.get('designation')?.invalid
+                    ) {
+
+                    <small>
+                        Designation is required
+                    </small>
+
+                    }
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select formControlName="status">
+
+                        <option value="ACTIVE">
+                            Active
+                        </option>
+
+                        <option value="INACTIVE">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM ACTIONS -->
+
+            <div class="form-actions">
+
+                <button type="button" class="cancel-btn" (click)="closeForm()">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="submit" class="save-btn">
+
+                    {{
+                    isEditMode()
+                    ? 'Update Staff'
+                    : 'Create Staff'
+                    }}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    }
+
+
+    <!-- =========================
+         STAFF TABLE
+    ========================== -->
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <!-- SELECT ALL -->
+
+                    <th class="checkbox-column">
+
+
+                    </th>
+
+
+                    <th>
+                        S.No
+                    </th>
+
+                    <th>
+                        Staff
+                    </th>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Designation
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @if (staffList().length === 0) {
+
+                <tr>
+                    <td colspan="8" class="no-records">
+                        No records found
+                    </td>
+                </tr>
+
+                } @else {
+
+                @for (
+                staff of staffList();
+                track staff._id;
+                let i = $index
+                ) {
+
+                <tr>
+
+                    <td class="checkbox-column">
+                        <input type="checkbox" [checked]="isStaffSelected(staff._id)" (change)="
+                            toggleStaffSelection(
+                                staff._id,
+                                $any($event.target).checked
+                            )
+                        " />
+                    </td>
+
+                    <td>{{ i + 1 }}</td>
+
+                    <td>
+                        <div class="user-info">
+                            <div class="avatar">
+                                {{
+                                staff.name
+                                ? staff.name.charAt(0).toUpperCase()
+                                : '?'
+                                }}
+                            </div>
+
+                            <div>
+
+                                <div class="user-name">
+                                    {{ staff.name }}
+                                </div>
+
+                                <div class="user-id">
+                                    {{ staff.uniqueUserId }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td>{{ staff.email }}</td>
+
+                    <td>{{ staff.phone || '-' }}</td>
+
+                    <td>{{ staff.designation || '-' }}</td>
+
+                    <td>
+                        <span class="status-badge" [class.active]="staff.status === 'ACTIVE'"
+                            [class.inactive]="staff.status === 'INACTIVE'">
+                            {{
+                            staff.status === 'ACTIVE'
+                            ? 'Active'
+                            : 'Inactive'
+                            }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="action-buttons">
+
+                            <button type="button" class="icon-btn edit-btn" title="Edit Staff"
+                                (click)="editStaff(staff)">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+
+                            <button type="button" class="icon-btn delete-btn" title="Delete Staff"
+                                (click)="deleteStaff(staff)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+                }
+
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <!-- =========================
+         ASSIGN SERVICES BUTTON
+    ========================== -->
+
+    @if (selectedStaffIds().length > 0) {
+    <div class="selected-staff-actions">
+        <!-- <span>
+
+            {{ selectedStaffIds().length }}
+
+            staff selected
+
+        </span> -->
+        <button type="button" class="save-btn" (click)="openServices()">
+            Assign Services
+        </button>
+
+    </div>
+
+    }
+
+</div>
+
+
+<!-- =====================================================
+     SERVICE POPUP
+====================================================== -->
+
+@if (showServicePopup()) {
+
+<div class="delete-overlay">
+
+    <div class="delete-popup service-popup">
+
+        <div class="delete-content">
+
+            <h3>Assign Services</h3>
+
+            <p>
+                Staff:
+                <strong>
+                    {{ selectedServiceStaff()?.name }}
+                </strong>
+            </p>
+
+        </div>
+
+        <div class="service-list">
+
+            @for (
+            service of serviceList();
+            track service._id
+            ) {
+
+            <label class="service-item">
+
+                <input type="checkbox" [checked]="isServiceSelected(service._id)" (change)="toggleService(service._id)">
+
+                <div class="service-details">
+
+                    <strong>
+                        {{ service.name }}
+                    </strong>
+
+                    <span>
+                        {{ service.description }}
+                    </span>
+
+                </div>
+
+            </label>
+
+            }
+
+        </div>
+
+        <div class="delete-actions">
+
+            <button type="button" class="delete-cancel-btn" (click)="closeServicePopup()">
+
+                Cancel
+
+            </button>
+
+            <button type="button" class="save-btn" (click)="saveStaffServices()">
+
+                Save Services
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}
+
+
+<!-- =====================================================
+     DELETE POPUP
+====================================================== -->
+
+@if (showDeletePopup()) {
+
+<div class="delete-overlay">
+
+    <div class="delete-popup">
+
+
+        <div class="delete-icon">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </div>
+
+
+        <div class="delete-content">
+
+            <h3>
+                Delete Staff?
+            </h3>
+
+
+            <p>
+
+                Are you sure you want to delete
+
+                <strong>
+                    {{ selectedDeleteStaff()?.name }}
+                </strong>?
+
+            </p>
+
+
+            <span>
+                This action cannot be undone.
+            </span>
+
+        </div>
+
+
+        <div class="delete-actions">
+
+            <button type="button" class="delete-cancel-btn" (click)="cancelDelete()">
+
+                Cancel
+
+            </button>
+
+
+            <button type="button" class="delete-confirm-btn" (click)="confirmDelete()">
+
+                Delete
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

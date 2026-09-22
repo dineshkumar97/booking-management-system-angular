@@ -549,3 +549,311 @@ tbody tr:hover {
 .delete-confirm-btn:hover {
     background: #b91c1c;
 }
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 70px;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.status-badge.inactive {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.no-data {
+    padding: 30px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   ASSIGN SERVICES POPUP
+   ========================================================= */
+
+.service-popup {
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   POPUP HEADER
+   ========================================================= */
+
+.service-popup .delete-content {
+  padding: 22px 24px;
+  margin: 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.service-popup h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.service-popup p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.service-popup p strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SERVICE LIST
+   ========================================================= */
+
+.service-list {
+  padding: 18px 24px;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* Scrollbar */
+
+.service-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.service-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.service-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   SERVICE ITEM
+   ========================================================= */
+
+.service-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.service-item:hover {
+  border-color: #c7d2fe;
+  background: #f8faff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.service-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+
+  margin: 2px 0 0;
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  accent-color: #2563eb;
+}
+
+.no-records {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   SERVICE DETAILS
+   ========================================================= */
+
+.service-details {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.service-details strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+      text-align: left;
+}
+
+.service-details span {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.service-popup .delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  padding: 16px 24px;
+
+  border-top: 1px solid #e9ecef;
+
+  background: #fafafa;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.service-popup .delete-cancel-btn {
+  min-width: 100px;
+  height: 40px;
+
+  padding: 0 18px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.service-popup .delete-cancel-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.service-popup .save-btn {
+  min-width: 130px;
+  height: 40px;
+
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+.service-popup .save-btn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.service-popup .save-btn:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .service-popup {
+    width: calc(100vw - 24px);
+    max-width: none;
+  }
+
+  .service-popup .delete-content {
+    padding: 18px;
+  }
+
+  .service-list {
+    padding: 14px 18px;
+    max-height: 50vh;
+  }
+
+  .service-popup .delete-actions {
+    padding: 14px 18px;
+  }
+
+  .service-popup .delete-cancel-btn,
+  .service-popup .save-btn {
+    min-width: 0;
+    flex: 1;
+  }
+}

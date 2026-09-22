@@ -1,11 +1,12 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerService } from '../../customer-layout/customer-service';
+import { CommonDatePipe } from '../../../common/common-date.pipe';
 
 @Component({
   selector: 'app-staff-appointments',
   standalone: true,
-  imports: [],
+  imports: [CommonDatePipe],
   templateUrl: './staff-appointments.html',
   styleUrl: './staff-appointments.scss'
 })

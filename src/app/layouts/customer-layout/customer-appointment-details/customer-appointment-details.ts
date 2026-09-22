@@ -46,7 +46,7 @@ export class CustomerAppointmentDetails implements OnInit {
 
 
   getAppointmentAll(): void {
-    this.customerService.getMyAppointmentsID(this.appointmentId).subscribe({
+    this.customerService.getCustomerAppointmentById(this.appointmentId).subscribe({
       next: (response: any) => {
         this.appointment = response.data;
       },

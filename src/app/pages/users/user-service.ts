@@ -5,12 +5,17 @@ import { environment } from '../../../environments/environment';
 
 export interface User {
   _id: string;
+  uniqueUserId: string;
   name: string;
   email: string;
-  role?: string;
+  phone?: string;
+  role: string;
   designation?: string;
+  status?: 'ACTIVE' | 'INACTIVE';
+  profileImage?: string;
+  services?: string[];
+  isActive: boolean;
 }
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,5 +28,34 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/user/all`);
+  }
+  createUser(userData: any) {
+    return this.http.post(
+      `${this.apiUrl}/user/create`,
+      userData
+    );
+  }
+  updateUser(idUser: string, userData: any) {
+    return this.http.put(
+      `${this.apiUrl}/user/update/${idUser}`,
+      userData
+    );
+  }
+
+  deleteUser(idUser: string) {
+    return this.http.delete(
+      `${this.apiUrl}/user/delete/${idUser}`
+    );
+  }
+
+ 
+  assignStaffServie(
+    id: string,
+    serviceData: any
+  ): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/user/staff/assign/${id}/services`,
+      serviceData
+    );
   }
 }

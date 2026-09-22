@@ -114,30 +114,25 @@ export class MainLayout implements OnInit {
           icon: '📊',
           route: '/admin-dashboard'
         },
-        //   {
-        //   label: 'Users',
-        //   icon: '📊',
-        //   route: '/users'
-        // },
-        // {
-        //   label: 'Users',
-        //   icon: '👥',
-        //   route: '/admin-users'
-        // },
+        {
+          label: 'Users',
+          icon: '👥',
+          route: '/admin-users'
+        },
         {
           label: 'Services',
           icon: '🛠️',
-          route: '/admin-services'
+          route: '/admin-service-management'
         },
         {
-          label: 'Staff',
+          label: 'Staff Management',
           icon: '👨‍💼',
-          route: '/admin-staff'
+          route: '/admin-staff-management'
         },
         {
           label: 'Appointments',
           icon: '📅',
-          route: '/admin-appointments'
+          route: '/admin-appointment-management'
         }
       ]);
     }

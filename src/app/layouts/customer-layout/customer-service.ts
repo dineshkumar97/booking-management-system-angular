@@ -66,19 +66,19 @@ export class CustomerService {
   constructor() { }
 
   public createService(data: any): Observable<serverResponse> {
-    return this.http.post<serverResponse>(`${this.apiUrl}/services/create`, data);
+    return this.http.post<serverResponse>(`${this.apiUrl}/service/create`, data);
   }
 
   public updateService(idUser: string, data: any): Observable<serverResponse> {
-    return this.http.put<serverResponse>(`${this.apiUrl}/services/update/${idUser}`, data);
+    return this.http.put<serverResponse>(`${this.apiUrl}/service/update/${idUser}`, data);
   }
 
   public getServiceID(id: string) {
-    return this.http.get(`${this.apiUrl}/services/get/${id}`);
+    return this.http.get(`${this.apiUrl}/service/get/${id}`);
   }
 
   public getServiceAll() {
-    return this.http.get(`${this.apiUrl}/services/all`);
+    return this.http.get(`${this.apiUrl}/service/all`);
   }
 
   public getStaffAll() {
@@ -89,11 +89,11 @@ export class CustomerService {
   }
 
 
-  getMyAppointments(): Observable<any[]> {
+  getCustomerAppointments(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/all`);
   }
 
-  getMyAppointmentsID(id: any): Observable<AppointmentResponse> {
+  getCustomerAppointmentById(id: any): Observable<AppointmentResponse> {
     return this.http.get<AppointmentResponse>(`${this.apiUrl}/appointments/get/${id}`);
   }
 
@@ -114,10 +114,9 @@ export class CustomerService {
     );
   }
 
-  rejectStaffAppointment(id: string): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/appointments/staff/${id}/reject`,
-      {});
+  rejectStaffAppointment(id: string,comment: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/appointments/staff/${id}/reject`,{comment}
+    );
   }
 
   completeStaffAppointment(id: string): Observable<any> {

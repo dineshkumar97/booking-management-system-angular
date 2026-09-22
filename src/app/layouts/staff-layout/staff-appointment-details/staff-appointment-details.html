@@ -1,152 +1,379 @@
 <div class="appointment-details">
+
   <!-- Header -->
   <div class="page-header">
+
     <div>
       <h1>Appointment Details</h1>
-      <p>View and manage appointment details.</p>
+
+      <p>
+        View and manage appointment details.
+      </p>
     </div>
-    <button type="button" class="back-btn" (click)="backToAppointments()">
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="backToAppointments()"
+    >
       ← Back
     </button>
+
   </div>
 
 
   <!-- Appointment Card -->
   @if (appointment()) {
-  <div class="details-card">
-    <div class="card-header">
-      <div>
-        <h2>
-          Appointment #{{ appointment()?._id }}
-        </h2>
-        <p>
-          Appointment information
-        </p>
-      </div>
-      <span class="status" [class.pending]="appointment()?.status === 'PENDING'"
-        [class.confirmed]="appointment()?.status === 'CONFIRMED'"
-        [class.completed]="appointment()?.status === 'COMPLETED'"
-        [class.rejected]="appointment()?.status === 'REJECTED'"
-        [class.cancelled]="appointment()?.status === 'CANCELLED'">
-        {{ appointment()?.status }}
-      </span>
-    </div>
 
-    <div class="details-grid">
-      <!-- Customer -->
-      <div class="detail-item">
-        <span class="label">Customer</span>
-        <span class="value">
-          {{ appointment()?.customerId?.name }}
+    <div class="details-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <h2>
+            Appointment #{{ appointment()?._id }}
+          </h2>
+
+          <p>
+            Appointment information
+          </p>
+
+        </div>
+
+        <span
+          class="status"
+          [class.pending]="
+            appointment()?.status === 'PENDING'
+          "
+          [class.confirmed]="
+            appointment()?.status === 'CONFIRMED'
+          "
+          [class.completed]="
+            appointment()?.status === 'COMPLETED'
+          "
+          [class.rejected]="
+            appointment()?.status === 'REJECTED'
+          "
+          [class.cancelled]="
+            appointment()?.status === 'CANCELLED'
+          "
+        >
+          {{ appointment()?.status }}
         </span>
-      </div>
-      <!-- Customer Email -->
-      <div class="detail-item">
-        <span class="label">Email</span>
-        <span class="value">
-          {{ appointment()?.customerId?.email }}
-        </span>
+
       </div>
 
-      <!-- Customer Phone -->
-      <div class="detail-item">
-        <span class="label">Phone</span>
-        <span class="value">
-          {{ appointment()?.customerId?.phone }}
-        </span>
+
+      <div class="details-grid">
+
+        <!-- Customer -->
+        <div class="detail-item">
+
+          <span class="label">
+            Customer
+          </span>
+
+          <span class="value">
+            {{ appointment()?.customerId?.name }}
+          </span>
+
+        </div>
+
+
+        <!-- Customer Email -->
+        <div class="detail-item">
+
+          <span class="label">
+            Email
+          </span>
+
+          <span class="value">
+            {{ appointment()?.customerId?.email }}
+          </span>
+
+        </div>
+
+
+        <!-- Customer Phone -->
+        <div class="detail-item">
+
+          <span class="label">
+            Phone
+          </span>
+
+          <span class="value">
+            {{ appointment()?.customerId?.phone }}
+          </span>
+
+        </div>
+
+
+        <!-- Service -->
+        <div class="detail-item">
+
+          <span class="label">
+            Service
+          </span>
+
+          <span class="value">
+            {{ appointment()?.serviceId?.name }}
+          </span>
+
+        </div>
+
+
+        <!-- Price -->
+        <div class="detail-item">
+
+          <span class="label">
+            Price
+          </span>
+
+          <span class="value">
+            ₹{{ appointment()?.serviceId?.price }}
+          </span>
+
+        </div>
+
+
+        <!-- Duration -->
+        <div class="detail-item">
+
+          <span class="label">
+            Duration
+          </span>
+
+          <span class="value">
+            {{ appointment()?.serviceId?.duration }}
+            minutes
+          </span>
+
+        </div>
+
+
+        <!-- Date -->
+        <div class="detail-item">
+
+          <span class="label">
+            Date
+          </span>
+
+          <span class="value">
+            {{
+              appointment()?.appointmentDate
+                | date:'dd MMM yyyy'
+            }}
+          </span>
+
+        </div>
+
+
+        <!-- Time -->
+        <div class="detail-item">
+
+          <span class="label">
+            Time
+          </span>
+
+          <span class="value">
+            {{ appointment()?.startTime }}
+          </span>
+
+        </div>
+
+
+        <!-- Staff -->
+        <div class="detail-item">
+
+          <span class="label">
+            Staff
+          </span>
+
+          <span class="value">
+            {{ appointment()?.staffId?.name }}
+          </span>
+
+        </div>
+
+
+        <!-- Appointment ID -->
+        <div class="detail-item">
+
+          <span class="label">
+            Appointment ID
+          </span>
+
+          <span class="value">
+            #{{ appointment()?._id }}
+          </span>
+
+        </div>
+
+
+        <!-- Notes -->
+        <div class="detail-item">
+
+          <span class="label">
+            Notes
+          </span>
+
+          <span class="value">
+            {{ appointment()?.notes || 'No notes' }}
+          </span>
+
+        </div>
+
       </div>
 
-      <!-- Service -->
-      <div class="detail-item">
-        <span class="label">Service</span>
-        <span class="value">
-          {{ appointment()?.serviceId?.name }}
-        </span>
-      </div>
 
-      <!-- Price -->
-      <div class="detail-item">
-        <span class="label">Price</span>
-        <span class="value">
-          ₹{{ appointment()?.serviceId?.price }}
-        </span>
-      </div>
+      <!-- Actions -->
+      @if (
+        appointment()?.status === 'PENDING' ||
+        appointment()?.status === 'CONFIRMED'
+      ) {
 
-      <!-- Duration -->
-      <div class="detail-item">
-        <span class="label">Duration</span>
-        <span class="value">
-          {{ appointment()?.serviceId?.duration }} minutes
-        </span>
-      </div>
+        <div class="actions">
 
-      <!-- Date -->
-      <div class="detail-item">
-        <span class="label">Date</span>
-        <span class="value">
-          {{ appointment()?.appointmentDate | date:'dd MMM yyyy' }}
-        </span>
-      </div>
+          @if (
+            appointment()?.status === 'PENDING'
+          ) {
 
-      <!-- Time -->
-      <div class="detail-item">
-        <span class="label">Time</span>
-        <span class="value">
-          {{ appointment()?.startTime }}
-        </span>
-      </div>
-
-      <!-- Staff -->
-      <div class="detail-item">
-        <span class="label">Staff</span>
-        <span class="value">
-          {{ appointment()?.staffId?.name }}
-        </span>
-      </div>
-
-      <!-- Appointment ID -->
-      <div class="detail-item">
-        <span class="label">Appointment ID</span>
-        <span class="value">
-          #{{ appointment()?._id }}
-        </span>
-      </div>
-
-      <!-- Notes -->
-      <div class="detail-item">
-        <span class="label">Notes</span>
-        <span class="value">
-          {{ appointment()?.notes || 'No notes' }}
-        </span>
-      </div>
-    </div>
+            <button
+              type="button"
+              class="confirm-btn"
+              (click)="confirmAppointment()"
+            >
+              Confirm
+            </button>
 
 
-    @if (
-    appointment()?.status === 'PENDING' ||
-    appointment()?.status === 'CONFIRMED'
-    ) {
-    <div class="actions">
-      @if (appointment()?.status === 'PENDING') {
-      <button type="button" class="confirm-btn" (click)="confirmAppointment()">
-        Confirm
-      </button>
-      <button type="button" class="reject-btn" (click)="rejectAppointment()">
-        Reject
-      </button>
+            <button
+              type="button"
+              class="reject-btn"
+              (click)="openRejectPopup()"
+            >
+              Reject
+            </button>
+
+          }
+
+
+          @if (
+            appointment()?.status === 'CONFIRMED'
+          ) {
+
+            <button
+              type="button"
+              class="complete-btn"
+              (click)="completeAppointment()"
+            >
+              Complete
+            </button>
+
+          }
+
+        </div>
+
       }
-      @if (appointment()?.status === 'CONFIRMED') {
-      <button type="button" class="complete-btn" (click)="completeAppointment()">
-        Complete
-      </button>
-      }
+
     </div>
-    }
-  </div>
+
   } @else {
-  <div class="details-card">
-    <p>Loading appointment details...</p>
-  </div>
+
+    <div class="details-card">
+
+      <p>
+        Loading appointment details...
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ================================= -->
+  <!-- REJECT COMMENT POPUP -->
+  <!-- ================================= -->
+
+  @if (showRejectPopup()) {
+
+    <div
+      class="popup-overlay"
+      (click)="closeRejectPopup()"
+    >
+
+      <div
+        class="comment-popup"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- Popup Header -->
+        <div class="popup-header">
+
+          <div>
+            <h3>
+              Reject Appointment
+            </h3>
+
+            <p>
+              Please provide a reason for rejection.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="close-btn"
+            (click)="closeRejectPopup()"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- Popup Body -->
+        <div class="popup-body">
+
+          <label for="rejectionComment">
+            Rejection Comment
+          </label>
+
+          <textarea
+            id="rejectionComment"
+            rows="5"
+            [(ngModel)]="rejectionComment"
+            placeholder="Enter rejection reason..."
+          ></textarea>
+
+        </div>
+
+
+        <!-- Popup Actions -->
+        <div class="popup-actions">
+
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeRejectPopup()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="reject-btn"
+            (click)="submitRejectAppointment()"
+          >
+            Reject Appointment
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   }
 
 </div>

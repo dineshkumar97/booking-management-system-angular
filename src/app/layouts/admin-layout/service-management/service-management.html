@@ -1,0 +1,241 @@
+<div class="attention-card">
+  <!-- Header -->
+  <div class="users-header">
+    <div class="title-section">
+      <h2>Service Management</h2>
+      <p>
+        Manage services and their availability
+      </p>
+    </div>
+    <button type="button" class="create-btn" (click)="createService()">
+      <span>+</span>
+      Add Service
+    </button>
+  </div>
+  <!-- CREATE / EDIT FORM -->
+  @if (showCreateForm()) {
+  <div class="service-form-card">
+    <div class="form-header">
+      <div>
+        <h3>
+          {{
+          isEditMode()
+          ? 'Edit Service'
+          : 'Create Service'
+          }}
+        </h3>
+        <p>
+          {{
+          isEditMode()
+          ? 'Update service information'
+          : 'Enter service information'
+          }}
+        </p>
+      </div>
+      <button type="button" class="close-btn" (click)="closeForm()">
+        ×
+      </button>
+    </div>
+    <form [formGroup]="serviceForm" (ngSubmit)="submitService()">
+      <div class="form-grid">
+        <!-- NAME -->
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" formControlName="name" placeholder="Enter service name">
+          @if (
+          serviceForm.get('name')?.touched &&
+          serviceForm.get('name')?.invalid
+          ) {
+          <small>
+            Service name is required
+          </small>
+          }
+        </div>
+        <!-- DURATION -->
+        <div class="form-group">
+          <label>
+            Duration (minutes)
+          </label>
+          <select id="duration" formControlName="duration">
+            @for (duration of durationOptions; track duration) {
+            <option [value]="duration">
+              {{ duration }} Minutes
+            </option>
+            }
+          </select>
+          @if (
+          serviceForm.get('duration')?.touched &&
+          serviceForm.get('duration')?.invalid
+          ) {
+          <small>
+            Duration must be at least 1 minute
+          </small>
+          }
+        </div>
+        <!-- PRICE -->
+        <div class="form-group">
+          <label>
+            Price
+          </label>
+          <input type="number" formControlName="price" min="0" placeholder="Enter price">
+          @if (
+          serviceForm.get('price')?.touched &&
+          serviceForm.get('price')?.invalid
+          ) {
+          <small>
+            Price is required
+          </small>
+          }
+        </div>
+        <!-- STATUS -->
+        <div class="form-group">
+          <label>
+            Status
+          </label>
+          <select formControlName="status">
+            <option value="ACTIVE">
+              Active
+            </option>
+            <option value="INACTIVE">
+              Inactive
+            </option>
+          </select>
+        </div>
+        <!-- DESCRIPTION -->
+        <div class="form-group full-width">
+          <label>
+            Description
+          </label>
+          <textarea formControlName="description" rows="4" placeholder="Enter service description">
+            </textarea>
+          @if (
+          serviceForm.get('description')?.touched &&
+          serviceForm.get('description')?.invalid
+          ) {
+          <small>
+            Description is required
+          </small>
+          }
+        </div>
+      </div>
+      <!-- ACTIONS -->
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="closeForm()">
+          Cancel
+        </button>
+        <button type="submit" class="save-btn">
+          {{
+          isEditMode()
+          ? 'Update Service'
+          : 'Create Service'
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+  <!-- SERVICE TABLE -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Service</th>
+          <th>Description</th>
+          <th>Duration</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (
+        service of serviceList();
+        track service._id;
+        let i = $index
+        ) {
+        <tr>
+          <td class="serial-number">
+            {{ i + 1 }}
+          </td>
+          <td>
+            <div class="service-name">
+              {{ service.name }}
+            </div>
+          </td>
+          <td>
+            <div class="description">
+              {{ service.description }}
+            </div>
+          </td>
+          <td>
+            {{ service.duration }} min's
+          </td>
+          <td>
+            ₹{{ service.price }}
+          </td>
+          <td>
+            <span class="status-badge" [class.active]="service.status === 'ACTIVE'"
+              [class.inactive]="service.status === 'INACTIVE'">
+              {{
+              service.status === 'ACTIVE'
+              ? 'Active'
+              : 'Inactive'
+              }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button type="button" class="icon-btn edit-btn" title="Edit Service" (click)="editService(service)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button type="button" class="icon-btn delete-btn" title="Delete Service" (click)="deleteService(service)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+        @if (serviceList().length === 0) {
+        <tr>
+          <td colspan="7" class="no-data">
+            No services found.
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- DELETE POPUP -->
+@if (showDeletePopup()) {
+<div class="delete-overlay">
+  <div class="delete-popup">
+    <div class="delete-icon">
+      <i class="fa-solid fa-trash"></i>
+    </div>
+    <div class="delete-content">
+      <h3>
+        Delete Service?
+      </h3>
+      <p>
+        Are you sure you want to delete
+        <strong>
+          {{ selectedDeleteService()?.name }}
+        </strong>?
+      </p>
+      <span>
+        This action cannot be undone.
+      </span>
+    </div>
+    <div class="delete-actions">
+      <button type="button" class="delete-cancel-btn" (click)="cancelDelete()">
+        Cancel
+      </button>
+      <button type="button" class="delete-confirm-btn" (click)="confirmDelete()">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+}

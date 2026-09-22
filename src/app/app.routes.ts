@@ -151,11 +151,58 @@ export const routes: Routes = [
           import('./layouts/staff-layout/staff-appointment-details/staff-appointment-details')
             .then(m => m.StaffAppointmentDetails)
       },
-       {
-        path: 'users',
+      {
+        path: 'admin-dashboard',
+        title: 'BMS | Admin Dashboard',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
         loadComponent: () =>
-          import('./pages/users/users')
-            .then(m => m.Users)
+          import('./layouts/admin-layout/admin-dashboard/admin-dashboard')
+            .then(m => m.AdminDashboard)
+      },
+      {
+        path: 'admin-staff-management',
+        title: 'BMS | Admin Dashboard',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
+        loadComponent: () =>
+          import('./layouts/admin-layout/staff-management/staff-management')
+            .then(m => m.StaffManagement)
+      },
+       {
+        path: 'admin-service-management',
+        title: 'BMS | Admin Service',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
+        loadComponent: () =>
+          import('./layouts/admin-layout/service-management/service-management')
+            .then(m => m.ServiceManagement)
+      },
+       {
+        path: 'admin-appointment-management',
+        title: 'BMS | Admin Appointment Management',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
+        loadComponent: () =>
+          import('./layouts/admin-layout/appointment-management/appointment-management')
+            .then(m => m.AppointmentManagement)
+      },
+      {
+        path: 'admin-users',
+        title: 'BMS | Users',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
+        loadComponent: () => import('./pages/users/users').then(m => m.Users)
       },
       // =========================
       // PROFILE
