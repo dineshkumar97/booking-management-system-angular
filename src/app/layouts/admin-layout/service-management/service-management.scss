@@ -369,6 +369,7 @@ tbody tr:hover {
 }
 
 .form-group input,
+.form-group textarea,
 .form-group select {
     width: 100%;
     box-sizing: border-box;
@@ -383,6 +384,7 @@ tbody tr:hover {
 }
 
 .form-group input:focus,
+.form-group textarea:focus,
 .form-group select:focus {
     border-color: #2563eb;
 }
@@ -401,6 +403,7 @@ tbody tr:hover {
     padding-top: 18px;
 
     border-top: 1px solid #e5e7eb;
+    margin-bottom: 15px;
 }
 
 .cancel-btn,
@@ -548,4 +551,36 @@ tbody tr:hover {
 
 .delete-confirm-btn:hover {
     background: #b91c1c;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 70px;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.status-badge.inactive {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.no-data {
+    padding: 30px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
 }

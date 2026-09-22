@@ -26,8 +26,6 @@ export interface LoginResponse {
 })
 export class LoginService {
   private platformId = inject(PLATFORM_ID);
-  //  private apiUrl = 'http://localhost:3000/booking-management-systemt/user';
-  //  private apiUrl = 'https://1gipascky0.execute-api.ap-south-1.amazonaws.com/booking-management-systemt/user';
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
