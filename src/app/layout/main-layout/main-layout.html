@@ -1,9 +1,7 @@
 <div class="app-container">
-
   <!-- ======================================
        SIDEBAR
   ======================================= -->
-
   <aside class="sidebar">
     <!-- Logo -->
     <div class="logo">
@@ -13,90 +11,52 @@
       <span class="logo-text">
         Employee Management
       </span>
-
     </div>
-
-
     <!-- Navigation -->
-
     <nav class="sidebar-nav">
-
       @for (menu of menuItems(); track menu.label) {
-
       <a class="menu-item" [class.active]="activeMenu() === menu.label" [routerLink]="menu.route"
         (click)="selectMenu(menu)">
-
         <span class="menu-icon">
           {{ menu.icon }}
         </span>
-
         <span class="menu-label">
           {{ menu.label }}
         </span>
-
       </a>
-
       }
-
     </nav>
-
-
     <!-- Sidebar Bottom -->
-
     <div class="sidebar-footer">
-
       <div class="store-status">
-
         <span class="status-dot"></span>
-
         <div>
           <strong>Store Online</strong>
           <small>All systems operational</small>
         </div>
-
       </div>
-
     </div>
-
   </aside>
-
-
   <!-- ======================================
        MAIN
   ======================================= -->
-
   <main class="main-content">
-
-
     <!-- ====================================
          HEADER
     ===================================== -->
-
     <header class="header">
-
-
       <!-- Mobile Menu -->
-
       <button class="mobile-menu-button">
         ☰
       </button>
-
-
       <!-- Search -->
-
       <div class="search-container visibility-hidden">
-
         <span class="search-icon">
           ⌕
         </span>
-
         <input type="text" placeholder="Search products, orders, SKUs..." />
-
       </div>
-
-
       <!-- Header Right -->
-
       <div class="header-right">
           <span class="profile-name">
             {{ userName() }}
@@ -134,17 +94,11 @@
         </div>
       </div>
     </header>
-
-
     <!-- ====================================
          DASHBOARD CONTENT
     ===================================== -->
-
     <section class="content">
       <router-outlet />
-
     </section>
-
   </main>
-
 </div>

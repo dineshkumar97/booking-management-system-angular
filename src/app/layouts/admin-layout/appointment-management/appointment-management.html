@@ -1,0 +1,259 @@
+<div class="appointment-page">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+            <h2>My Appointments</h2>
+
+            <p>
+                View and manage your appointments
+            </p>
+        </div>
+
+        <button type="button" class="refresh-btn" (click)="getAppointments()">
+
+            Refresh
+
+        </button>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    @if (isLoading()) {
+
+    <div class="loading">
+        Loading appointments...
+    </div>
+
+    }
+
+
+    <!-- EMPTY -->
+
+    @if (
+    !isLoading() &&
+    appointments().length === 0
+    ) {
+
+    <div class="empty-state">
+
+        <h3>
+            No appointments found
+        </h3>
+
+        <p>
+            You don't have any appointments yet.
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- APPOINTMENT LIST -->
+
+    @if (
+    !isLoading() &&
+    appointments().length > 0
+    ) {
+
+    <div class="appointment-list">
+
+        @for (
+        appointment of appointments();
+        track appointment._id
+        ) {
+
+        <div class="appointment-card">
+
+            <!-- CARD HEADER -->
+
+            <div class="appointment-header">
+
+                <div>
+
+                    <span class="order-label">
+                        Order ID
+                    </span>
+
+                    <strong>
+                        {{ appointment.orderId }}
+                    </strong>
+
+                </div>
+
+                <span class="status" [class]="
+                getStatusClass(
+                  appointment.status
+                )
+              ">
+
+                    {{ appointment.status }}
+
+                </span>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="appointment-details">
+
+                <div class="detail-item">
+
+                    <span>
+                        Service
+                    </span>
+
+                    <strong>
+                        {{ getServiceName(appointment) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Staff
+                    </span>
+
+                    <strong>
+                        {{ getStaffName(appointment) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Date
+                    </span>
+
+                    <strong>
+                        {{formatDate(
+                        appointment.appointmentDate
+                        )
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Time
+                    </span>
+
+                    <strong>
+
+                        {{ appointment.startTime }}
+
+                        @if (appointment.endTime) {
+                        -
+                        {{ appointment.endTime }}
+                        }
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            @if (appointment.notes) {
+
+            <div class="appointment-notes">
+
+                <span>
+                    Notes
+                </span>
+
+                <p>
+                    {{ appointment.notes }}
+                </p>
+
+            </div>
+
+            }
+
+
+            <!-- ACTIONS -->
+
+            <div class="appointment-actions">
+
+                @if (
+                appointment.status === 'PENDING'
+                ) {
+
+                <button type="button" class="cancel-btn" (click)="
+                  cancelAppointment(
+                    appointment._id
+                  )
+                ">
+
+                    Cancel Appointment
+
+                </button>
+
+                }
+
+                @if (
+                appointment.status === 'CONFIRMED'
+                ) {
+
+                <span class="info-text">
+                    Appointment confirmed
+                </span>
+
+                }
+
+                @if (
+                appointment.status === 'COMPLETED'
+                ) {
+
+                <span class="success-text">
+                    Appointment completed
+                </span>
+
+                }
+
+                @if (
+                appointment.status === 'CANCELLED'
+                ) {
+
+                <span class="muted-text">
+                    Appointment cancelled
+                </span>
+
+                }
+
+                @if (
+                appointment.status === 'REJECTED'
+                ) {
+
+                <span class="danger-text">
+                    Appointment rejected
+                </span>
+
+                }
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</div>

@@ -53,7 +53,7 @@ export class CustomerDashboard implements OnInit {
 
   ngOnInit(): void {
 
-    this.getMyAppointments();
+    this.getCustomerAppointments();
 
   }
 
@@ -62,10 +62,10 @@ export class CustomerDashboard implements OnInit {
   // GET MY APPOINTMENTS
   // =========================
 
-  getMyAppointments(): void {
+  getCustomerAppointments(): void {
 
     this.customerService
-      .getMyAppointments()
+      .getCustomerAppointments()
       .subscribe({
 
         next: (response: any) => {
@@ -357,7 +357,7 @@ export class CustomerDashboard implements OnInit {
 
           // Get latest data from API
 
-          this.getMyAppointments();
+          this.getCustomerAppointments();
 
         },
 

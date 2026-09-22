@@ -78,7 +78,7 @@
 
         <tr>
 
-          <th>ID</th>
+          <th>Order ID</th>
           <th>Customer</th>
           <th>Service</th>
           <th>Date</th>
@@ -101,7 +101,7 @@
           <tr>
 
             <td>
-              #{{ appointment._id }}
+              #{{ appointment.orderId }}
             </td>
 
 
@@ -116,7 +116,7 @@
 
 
             <td>
-              {{ appointment.appointmentDate }}
+              {{ appointment.appointmentDate | commonDate }}
             </td>
 
 

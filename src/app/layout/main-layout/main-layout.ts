@@ -132,7 +132,7 @@ export class MainLayout implements OnInit {
         {
           label: 'Appointments',
           icon: '📅',
-          route: '/admin-appointments'
+          route: '/admin-appointment-management'
         }
       ]);
     }

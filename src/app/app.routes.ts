@@ -184,6 +184,17 @@ export const routes: Routes = [
           import('./layouts/admin-layout/service-management/service-management')
             .then(m => m.ServiceManagement)
       },
+       {
+        path: 'admin-appointment-management',
+        title: 'BMS | Admin Appointment Management',
+        canActivate: [authGuard],
+        data: {
+          roles: ['ADMIN']
+        },
+        loadComponent: () =>
+          import('./layouts/admin-layout/appointment-management/appointment-management')
+            .then(m => m.AppointmentManagement)
+      },
       {
         path: 'admin-users',
         title: 'BMS | Users',

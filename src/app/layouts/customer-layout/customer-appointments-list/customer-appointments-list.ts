@@ -23,7 +23,7 @@ export class CustomerAppointmentsList implements OnInit {
 
   }
   ngOnInit(): void {
-    this.getMyAppointments();
+    this.getCustomerAppointments();
   }
 
   appointments:any;
@@ -32,8 +32,8 @@ export class CustomerAppointmentsList implements OnInit {
     this.router.navigate(['/customer-service-list']);
 
   }
-  getMyAppointments(): void {
-    this.customerService.getMyAppointments().subscribe({
+  getCustomerAppointments(): void {
+    this.customerService.getCustomerAppointments().subscribe({
       next: (response: any) => {
         this.appointments = response.data;
       },

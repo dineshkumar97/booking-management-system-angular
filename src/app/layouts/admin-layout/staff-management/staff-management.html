@@ -270,8 +270,17 @@
 
             </thead>
 
-
             <tbody>
+
+                @if (staffList().length === 0) {
+
+                <tr>
+                    <td colspan="8" class="no-records">
+                        No records found
+                    </td>
+                </tr>
+
+                } @else {
 
                 @for (
                 staff of staffList();
@@ -281,102 +290,83 @@
 
                 <tr>
 
-                    <!-- CHECKBOX -->
-
                     <td class="checkbox-column">
-
-                        <input type="checkbox" [checked]="isStaffSelected(staff._id)"
-                            (change)="toggleStaffSelection(staff._id,$any($event.target).checked)" />
-
-
-                        <!-- S.NO -->
-
-                    <td>
-                        {{ i + 1 }}
+                        <input type="checkbox" [checked]="isStaffSelected(staff._id)" (change)="
+                            toggleStaffSelection(
+                                staff._id,
+                                $any($event.target).checked
+                            )
+                        " />
                     </td>
 
-
-                    <!-- STAFF -->
+                    <td>{{ i + 1 }}</td>
 
                     <td>
-                        {{ staff.name }}
+                        <div class="user-info">
+                            <div class="avatar">
+                                {{
+                                staff.name
+                                ? staff.name.charAt(0).toUpperCase()
+                                : '?'
+                                }}
+                            </div>
+
+                            <div>
+
+                                <div class="user-name">
+                                    {{ staff.name }}
+                                </div>
+
+                                <div class="user-id">
+                                    {{ staff.uniqueUserId }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </td>
 
+                    <td>{{ staff.email }}</td>
 
-                    <!-- EMAIL -->
+                    <td>{{ staff.phone || '-' }}</td>
 
-                    <td>
-                        {{ staff.email }}
-                    </td>
-
-
-                    <!-- PHONE -->
+                    <td>{{ staff.designation || '-' }}</td>
 
                     <td>
-                        {{ staff.phone }}
-                    </td>
-
-
-                    <!-- DESIGNATION -->
-
-                    <td>
-                        {{ staff.designation || '-' }}
-                    </td>
-
-
-                    <!-- STATUS -->
-
-                    <td>
-
                         <span class="status-badge" [class.active]="staff.status === 'ACTIVE'"
                             [class.inactive]="staff.status === 'INACTIVE'">
-
                             {{
                             staff.status === 'ACTIVE'
                             ? 'Active'
                             : 'Inactive'
                             }}
-
                         </span>
-
                     </td>
 
-
-                    <!-- ACTIONS -->
-
                     <td>
-
                         <div class="action-buttons">
-
-                            <!-- EDIT -->
 
                             <button type="button" class="icon-btn edit-btn" title="Edit Staff"
                                 (click)="editStaff(staff)">
-
                                 <i class="fa-solid fa-pen"></i>
-
                             </button>
-
-
-                            <!-- DELETE -->
 
                             <button type="button" class="icon-btn delete-btn" title="Delete Staff"
                                 (click)="deleteStaff(staff)">
-
                                 <i class="fa-solid fa-trash"></i>
-
                             </button>
 
                         </div>
-
                     </td>
 
                 </tr>
 
                 }
 
-            </tbody>
+                }
 
+            </tbody>
         </table>
 
     </div>

@@ -1,337 +1,194 @@
 <div class="booking-page">
-
   @if (serviceId) {
-
   <div class="booking-page">
-
     <!-- ================= HEADER ================= -->
-
     <div class="page-header">
-
       <h1>Book Appointment</h1>
-
       <p>
         Select staff, date and time for your appointment
       </p>
-
     </div>
-
-
     <!-- ================= PROGRESS ================= -->
-
     <div class="steps">
-
       <div class="step" [class.active]="currentStep >= 1">
         <span>1</span>
         <label>Staff</label>
       </div>
-
       <div class="line"></div>
-
       <div class="step" [class.active]="currentStep >= 2">
         <span>2</span>
         <label>Date</label>
       </div>
-
       <div class="line"></div>
-
       <div class="step" [class.active]="currentStep >= 3">
         <span>3</span>
         <label>Time</label>
       </div>
-
       <div class="line"></div>
-
       <div class="step" [class.active]="currentStep >= 4">
         <span>4</span>
         <label>Confirm</label>
       </div>
-
     </div>
-
-
     <!-- ================= STEP 1 ================= -->
-
     @if (currentStep === 1) {
-
     <section class="staff-section">
-
       <h2>Select Staff</h2>
-
       <p class="section-description">
         Choose the staff member you prefer
       </p>
-
-
       <div class="staff-grid">
-
         @for (staff of staffList; track staff?._id) {
-
         <div class="staff-card" [class.selected]="staffselectBox === staff?._id" (click)="selectStaff(staff)">
-
           <div class="staff-avatar">
             {{ staff.name.charAt(0) }}
           </div>
-
-
           <div class="staff-info">
-
             <h3>
               {{ staff.name }}
             </h3>
-
             <p>
               {{ staff.designation }}
             </p>
-
           </div>
-
-
           @if (staffselectBox === staff?._id) {
-
           <div class="selected-icon">
             ✓
           </div>
-
           }
-
         </div>
-
         }
-
       </div>
-
-
       <div class="actions">
-
         <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
-
       </div>
-
     </section>
-
     }
-
-
     <!-- ================= STEP 2 ================= -->
-
     @if (currentStep === 2) {
-
     <section class="staff-section">
-
       <h2>Select Date</h2>
-
       <p class="section-description">
         Choose your preferred appointment date
       </p>
-
-
       <div class="date-grid">
-
         @for (date of availableDates; track date) {
-
         <button type="button" class="date-card" [class.selected]="selectedDate === date" (click)="selectDate(date)">
-
           {{ date }}
-
           @if (selectedDate === date) {
           <span>✓</span>
           }
-
         </button>
-
         }
-
       </div>
-
-
       <div class="actions">
-
         <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
-
-
         <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
-
       </div>
-
     </section>
-
     }
-
-
     <!-- ================= STEP 3 ================= -->
-
     @if (currentStep === 3) {
-
     <section class="staff-section">
-
       <h2>Select Time</h2>
-
       <p class="section-description">
         Choose your preferred appointment time
       </p>
-
-
       <div class="time-grid">
-
         @for (time of availableTimeSlots; track time) {
-
         <button type="button" class="time-card" [class.selected]="selectedTime === time" (click)="selectTime(time)">
-
           {{ time }}
-
           @if (selectedTime === time) {
           <span>✓</span>
           }
-
         </button>
-
         }
-
       </div>
-
-
       <div class="actions">
-
         <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
-
-
         <button type="button" class="continue-btn" [disabled]="!canContinue()" (click)="nextStep()">
           Continue
         </button>
-
       </div>
-
     </section>
-
     }
-
-
     <!-- ================= STEP 4 ================= -->
-
     @if (currentStep === 4) {
-
     <section class="confirm-section">
-
       <h2>Booking Summary</h2>
-
       <p class="section-description">
         Review your appointment details before confirming
       </p>
-
-
       <div class="summary-card">
-
         <div class="summary-row">
-
           <span class="summary-label">
             Service
           </span>
-
           <strong class="summary-value">
             {{ serviceName }}
           </strong>
-
         </div>
-
-
         <div class="summary-row">
-
           <span class="summary-label">
             Staff
           </span>
-
           <strong class="summary-value">
             {{ selectedStaffName }}
           </strong>
-
         </div>
-
-
         <div class="summary-row">
-
           <span class="summary-label">
             Date
           </span>
-
           <strong class="summary-value">
             {{ selectedDate }}
           </strong>
-
         </div>
-
-
         <div class="summary-row">
-
           <span class="summary-label">
             Time
           </span>
-
           <strong class="summary-value">
             {{ selectedTime }}
           </strong>
-
         </div>
-
-
         <div class="summary-row">
-
           <span class="summary-label">
             Price
           </span>
-
           <strong class="summary-value">
             ₹{{ servicePrice }}
           </strong>
-
         </div>
-
       </div>
-
-
       <div class="actions">
-
         <button type="button" class="back-btn" (click)="previousStep()">
           Back
         </button>
-
-
         <button type="button" class="continue-btn" (click)="confirmBooking()">
           Confirm Booking
         </button>
-
       </div>
-
     </section>
-
     }
-
   </div>
-
   } @else {
-
   <div class="no-service">
-
     <h2>Service Not Selected</h2>
-
     <p>
       Please select a service before booking an appointment.
     </p>
-
     <button type="button" class="back-btn" (click)="goToServices()">
       Back to Services
     </button>
-
   </div>
-
   }
-
 </div>

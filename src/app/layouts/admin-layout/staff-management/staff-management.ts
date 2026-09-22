@@ -157,13 +157,9 @@ export class StaffManagement implements OnInit {
 
       next: (response: User[]) => {
 
-        const staffUsers =
-          response.filter(
-            user => user.role === 'STAFF'
-          );
+        const staffUsers =response.filter(user => user.role === 'STAFF');
 
         this.staffList.set(staffUsers);
-
         console.log(
           'STAFF:',
           staffUsers
@@ -334,7 +330,7 @@ export class StaffManagement implements OnInit {
 
       email: formData.email,
 
-      phone: formData.phone,
+      phone:parseInt( formData.phone),
 
       designation:
         formData.designation,
@@ -355,15 +351,17 @@ export class StaffManagement implements OnInit {
         .createUser(staffData)
         .subscribe({
 
-          next: () => {
+          next: (response:any) => {
 
             this.closeForm();
 
             this.getStaff();
+            this.toast.success(response.message);
 
           },
 
-          error: error => {
+          error: (error:any) => {
+            this.toast.error(error.error.error);
 
             console.error(
               'Create staff error:',
@@ -399,15 +397,17 @@ export class StaffManagement implements OnInit {
       )
       .subscribe({
 
-        next: () => {
+        next: (response:any) => {
 
           this.closeForm();
 
           this.getStaff();
+            this.toast.success(response.message);
 
         },
 
-        error: error => {
+        error: (error:any) => {
+            this.toast.error(error.error.error);
 
           console.error(
             'Update staff error:',
@@ -643,7 +643,7 @@ export class StaffManagement implements OnInit {
           error
         );
 
-        this.toast.error(error.error.message);
+        this.toast.error(error.error.error);
         this.staffList.set([]);
 
       }

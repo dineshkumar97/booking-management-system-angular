@@ -5,6 +5,36 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+export interface Appointment {
+  _id: string;
+
+  orderId: string;
+
+  customerId: string;
+
+  serviceId: string | Service;
+
+  staffId: any;
+
+  appointmentDate: string;
+
+  startTime: string;
+
+  endTime?: string;
+
+  status:
+  | 'PENDING'
+  | 'CONFIRMED'
+  | 'CANCELLED'
+  | 'COMPLETED'
+  | 'REJECTED';
+
+  notes?: string;
+
+  createdAt?: string;
+
+  updatedAt?: string;
+}
 export interface Service {
   _id: string;
   name: string;
@@ -21,12 +51,12 @@ export interface Service {
 })
 export class AdminService {
 
-   private apiUrl = environment.apiUrl;
- 
+  private apiUrl = environment.apiUrl;
+
 
   constructor(
     private http: HttpClient
-  ) {}
+  ) { }
 
   getServices(): Observable<Service[]> {
     return this.http.get<Service[]>(
@@ -63,6 +93,18 @@ export class AdminService {
     );
   }
 
- 
- 
+
+
+  cancelAppointment(id: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/appointments/booking/${id}/cancel`, {});
+  }
+
+  getAllAppointments(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/appointments/admin/all`);
+  }
+
+  getMyAppointmentsID(id: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/appointments/get/${id}`);
+  }
+
 }
