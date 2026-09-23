@@ -87,7 +87,7 @@ export class CustomerBooking implements OnInit {
   }
 
   generateTimeSlots(selectedDate: string): void {
-    const interval = 5;
+    const interval = 30;
     this.availableTimeSlots = [];
     const now = new Date();
     const selected = new Date(selectedDate);
@@ -284,9 +284,9 @@ export class CustomerBooking implements OnInit {
     const booking: any = {
       serviceId: this.serviceId,
       staffId: this.selectedStaffId?._id,
-      appointmentDate: this.selectedDate,
-      startTime: this.selectedTime,
-      notes: 'Noted'
+      appointmentDate: '2026-09-26',
+      startTime: '16:00',
+      comments: 'Noted'
     };
     this.customerService.createAppointment(booking).subscribe({
       next: (response: any) => {

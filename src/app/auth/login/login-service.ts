@@ -20,7 +20,20 @@ export interface UserDetails {
 export interface LoginResponse {
   message: string;
 }
+export interface LoginOtpRequest {
+  email: string;
+}
 
+export interface VerifyLoginOtpRequest {
+  email: string;
+  otp: string;
+}
+
+export interface LoginOtpResponse {
+  message: string;
+  token: string;
+  user: any;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -85,6 +98,24 @@ export class LoginService {
         JSON.stringify(user)
       );
     }
+  }
+  
+  public sendLoginOtp(
+    data: LoginOtpRequest
+  ): Observable<LoginOtpResponse> {
+    return this.http.post<LoginOtpResponse>(
+      `${this.apiUrl}/user/send-login-otp`,
+      data
+    );
+  }
+
+  public verifyLoginOtp(
+    data: VerifyLoginOtpRequest
+  ): Observable<LoginOtpResponse> {
+    return this.http.post<LoginOtpResponse>(
+      `${this.apiUrl}/user/verify-login-otp`,
+      data
+    );
   }
 
 }

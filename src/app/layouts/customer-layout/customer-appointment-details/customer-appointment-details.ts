@@ -12,6 +12,7 @@ interface Appointment {
   endTime: string;
   price: number;
   status: string;
+  orderId:string;
   notes: string;
 }
 
@@ -87,10 +88,11 @@ export class CustomerAppointmentDetails implements OnInit {
           console.log('Cancel response:', response);
           this.toast.success(response.message)
           this.appointment.status = 'CANCELLED';
+          this.closeCancelDialog();
         },
         error: (error) => {
           console.error('Cancel error:', error);
-          this.toast.success(error?.error?.message || 'Failed to cancel appointment.');
+          this.toast.error(error?.error?.message || 'Failed to cancel appointment.');
         }
       });
   }

@@ -120,6 +120,7 @@ export class ResetPage implements OnInit {
     this.loginService.resetPassword(json).subscribe({
       next: (response: any) => {
         this.toastService.success(response.message);
+        this.router.navigate(['/login']);
       },
       error: (error) => {
         this.toastService.error(error?.error?.message);

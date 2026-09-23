@@ -228,7 +228,7 @@ export class StaffAppointmentDetails implements OnInit {
             'Appointment Completed:',
             response
           );
-
+          this.toastService.success(response.message);
           this.appointment.update(
             (current: any) =>
               current
@@ -238,6 +238,7 @@ export class StaffAppointmentDetails implements OnInit {
                   }
                 : null
           );
+          this.router.navigate(['/staff-appointments'])
         },
 
         error: (error) => {
@@ -246,6 +247,8 @@ export class StaffAppointmentDetails implements OnInit {
             'Complete appointment error:',
             error
           );
+          this.toastService.success(error.message);
+
         }
       });
   }
