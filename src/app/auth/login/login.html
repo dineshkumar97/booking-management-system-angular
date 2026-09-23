@@ -7,125 +7,273 @@
       <p>Sign in to continue</p>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="loginDetails()">
+    <!-- Email + Password Login -->
+    @if (!isOtpLogin) {
 
-      <!-- Email -->
-      <div class="form-group">
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="loginDetails()"
+      >
 
-        <label>Email</label>
+        <!-- Email -->
+        <div class="form-group">
 
-        <input type="email" formControlName="email" placeholder="Enter your email" [class.invalid]="
-            loginForm.get('email')?.invalid &&
-            loginForm.get('email')?.touched
-          " />
+          <label>Email</label>
 
-        <!-- Required -->
-        @if (
-        loginForm.get('email')?.touched &&
-        loginForm.get('email')?.hasError('required')
-        ) {
-        <small class="form-error">
-          Email is required
-        </small>
-        }
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.invalid]="
+              loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched
+            "
+          />
 
-        <!-- Invalid Email -->
-        @else if (
-        loginForm.get('email')?.touched &&
-        loginForm.get('email')?.hasError('email')
-        ) {
-        <small class="form-error">
-          Please enter a valid email address
-        </small>
-        }
+          @if (
+            loginForm.get('email')?.touched &&
+            loginForm.get('email')?.hasError('required')
+          ) {
+
+            <small class="form-error">
+              Email is required
+            </small>
+
+          } @else if (
+            loginForm.get('email')?.touched &&
+            loginForm.get('email')?.hasError('email')
+          ) {
+
+            <small class="form-error">
+              Please enter a valid email address
+            </small>
+
+          }
+
+        </div>
+
+
+        <!-- Password -->
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.invalid]="
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+            "
+          />
+
+          @if (
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.hasError('required')
+          ) {
+
+            <small class="form-error">
+              Password is required
+            </small>
+
+          } @else if (
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.hasError('minlength')
+          ) {
+
+            <small class="form-error">
+              Password must be at least 5 characters
+            </small>
+
+          }
+
+        </div>
+
+
+        <!-- Forgot Password -->
+        <div class="login-options">
+
+          <a
+            (click)="goToForgotPassword()"
+          >
+            Forgot Password?
+          </a>
+
+        </div>
+
+
+        <!-- Login Button -->
+        <button
+          type="submit"
+          class="login-btn"
+        >
+          Login
+        </button>
+
+      </form>
+
+
+      <!-- Login With OTP -->
+      <div class="login-options mt-3">
+
+        <a
+          (click)="showOtpLogin()"
+        >
+          Login with OTP
+        </a>
 
       </div>
 
+    }
 
-      <!-- Password -->
-      <div class="form-group">
 
-        <label>Password</label>
+    <!-- OTP Login -->
+    @if (isOtpLogin) {
 
-        <input type="password" formControlName="password" placeholder="Enter your password" [class.invalid]="
-            loginForm.get('password')?.invalid &&
-            loginForm.get('password')?.touched
-          " />
+      <form
+        [formGroup]="loginForm"
+      >
 
-        <!-- Required -->
-        @if (
-        loginForm.get('password')?.touched &&
-        loginForm.get('password')?.hasError('required')
-        ) {
-        <small class="form-error">
-          Password is required
-        </small>
+        <!-- Email -->
+        <div class="form-group">
+
+          <label>Email</label>
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.invalid]="
+              loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched
+            "
+          />
+
+          @if (
+            loginForm.get('email')?.touched &&
+            loginForm.get('email')?.hasError('required')
+          ) {
+
+            <small class="form-error">
+              Email is required
+            </small>
+
+          } @else if (
+            loginForm.get('email')?.touched &&
+            loginForm.get('email')?.hasError('email')
+          ) {
+
+            <small class="form-error">
+              Please enter a valid email address
+            </small>
+
+          }
+
+        </div>
+
+
+        <!-- Send OTP -->
+        @if (!otpSent) {
+
+          <button
+            type="button"
+            class="login-btn"
+            (click)="sendOtp()"
+          >
+            Send OTP
+          </button>
+
         }
 
-        <!-- Minimum Length -->
-        @else if (
-        loginForm.get('password')?.touched &&
-        loginForm.get('password')?.hasError('minlength')
-        ) {
-        <small class="form-error">
-          Password must be at least 6 characters
-        </small>
+
+        <!-- OTP -->
+        @if (otpSent) {
+
+          <form
+            [formGroup]="otpForm"
+          >
+
+            <div class="form-group">
+
+              <label>Enter OTP</label>
+
+              <input
+                type="text"
+                formControlName="otp"
+                maxlength="6"
+                inputmode="numeric"
+                placeholder="Enter 6 digit OTP"
+                [class.invalid]="
+                  otpForm.get('otp')?.invalid &&
+                  otpForm.get('otp')?.touched
+                "
+              />
+
+              @if (
+                otpForm.get('otp')?.touched &&
+                otpForm.get('otp')?.hasError('required')
+              ) {
+
+                <small class="form-error">
+                  OTP is required
+                </small>
+
+              } @else if (
+                otpForm.get('otp')?.touched &&
+                otpForm.get('otp')?.hasError('pattern')
+              ) {
+
+                <small class="form-error">
+                  OTP must be 6 digits
+                </small>
+
+              }
+
+            </div>
+
+
+            <!-- Verify OTP -->
+            <button
+              type="button"
+              class="login-btn"
+              (click)="verifyOtp()"
+            >
+              Verify OTP
+            </button>
+
+          </form>
+
         }
+
+      </form>
+
+
+      <!-- Back To Password Login -->
+      <div class="login-options mt-3">
+
+        <a
+          (click)="showPasswordLogin()"
+        >
+          Login with Password
+        </a>
 
       </div>
 
-
-      <!-- <div class="password-rules">
-
-          <p>Password must contain:</p>
-
-          <ul>
-
-            <li [class.valid]="hasMinLength()">
-              <span>{{ hasMinLength() ? '✓' : '✕' }}</span>
-              At least 8 characters
-            </li>
-
-            <li [class.valid]="hasUppercase()">
-              <span>{{ hasUppercase() ? '✓' : '✕' }}</span>
-              Uppercase letter
-            </li>
-
-            <li [class.valid]="hasLowercase()">
-              <span>{{ hasLowercase() ? '✓' : '✕' }}</span>
-              Lowercase letter
-            </li>
-
-            <li [class.valid]="hasNumber()">
-              <span>{{ hasNumber() ? '✓' : '✕' }}</span>
-              Number
-            </li>
-
-            <li [class.valid]="hasSpecialChar()">
-              <span>{{ hasSpecialChar() ? '✓' : '✕' }}</span>
-              Special character
-            </li>
-
-          </ul>
-
-        </div> -->
-
-      <!-- Remember Me -->
-      <div class="login-options">
-        <a (click)="goToForgotPassword()">Forgot Password?</a>
-      </div>
+    }
 
 
-      <!-- Submit -->
-      <button type="submit" class="login-btn">
-
-        Login
-
-      </button>
-
-    </form>
-
+    <!-- Signup -->
     <div class="login-options mt-3">
-      <a (click)="goToSignUp()">Don't have an account? Sign Up </a>
+
+      <a
+        (click)="goToSignUp()"
+      >
+        Don't have an account? Sign Up
+      </a>
+
     </div>
+
   </div>
+
+</div>

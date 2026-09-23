@@ -22,15 +22,15 @@
                 <h2>{{ appointment?.serviceId.name }}</h2>
 
                 <span class="appointment-id">
-                    Appointment ID: {{ appointment.id }}
+                    Appointment ID: {{ appointment?.orderId }}
                 </span>
             </div>
 
-            <span class="status" [class.confirmed]="appointment.status === 'CONFIRMED'"
-                [class.pending]="appointment.status === 'PENDING'"
-                [class.completed]="appointment.status === 'COMPLETED'"
-                [class.cancelled]="appointment.status === 'CANCELLED'">
-                {{ appointment.status }}
+            <span class="status" [class.confirmed]="appointment?.status === 'CONFIRMED'"
+                [class.pending]="appointment?.status === 'PENDING'"
+                [class.completed]="appointment?.status === 'COMPLETED'"
+                [class.cancelled]="appointment?.status === 'CANCELLED'">
+                {{ appointment?.status }}
             </span>
 
         </div>
@@ -50,17 +50,17 @@
 
             <div class="detail-item">
                 <span>Date</span>
-                <strong>{{ appointment.appointmentDate }}</strong>
+                <strong>{{ appointment?.appointmentDate }}</strong>
             </div>
 
             <div class="detail-item">
                 <span>Start Time</span>
-                <strong>{{ appointment.startTime }}</strong>
+                <strong>{{ appointment?.startTime }}</strong>
             </div>
 
             <div class="detail-item">
                 <span>End Time</span>
-                <strong>{{ appointment.endTime }}</strong>
+                <strong>{{ appointment?.endTime }}</strong>
             </div>
 
             <div class="detail-item">
@@ -76,15 +76,15 @@
             <span>Notes</span>
 
             <p>
-                {{ appointment.notes || 'No notes added.' }}
+                {{ appointment?.notes || 'No notes added.' }}
             </p>
 
         </div>
 
 
         @if (
-        appointment.status === 'PENDING' ||
-        appointment.status === 'CONFIRMED'
+        appointment?.status === 'PENDING' ||
+        appointment?.status === 'CONFIRMED'
         ) {
 
         <div class="actions">

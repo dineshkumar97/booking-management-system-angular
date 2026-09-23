@@ -1,92 +1,150 @@
 <div class="appointments-page">
 
     <div class="page-header">
+
         <div>
             <h1>My Appointments</h1>
             <p>View and manage your appointments</p>
         </div>
 
-        <a (click)="bookAppointment()" class="book-btn">
+        <a
+            (click)="bookAppointment()"
+            class="book-btn">
             + Book Appointment
         </a>
+
     </div>
 
-    @if (appointments.length > 0) {
 
-    <div class="appointment-grid">
+    @if (appointments().length > 0) {
 
-        @for (appointment of appointments; track appointment._id) {
+        <div class="appointment-grid">
 
-        <div class="appointment-card">
+            @for (appointment of appointments(); track appointment._id) {
 
-            <div class="card-header">
+                <div class="appointment-card">
 
-                <div>
-                    <h2>{{ appointment?.serviceId?.name }}</h2>
-                    <span class="appointment-id">
-                        {{ appointment._id }}
-                    </span>
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                {{ appointment.serviceId?.name }}
+                            </h2>
+
+                            <span class="appointment-id">
+                                {{ appointment._id }}
+                            </span>
+
+                        </div>
+
+
+                        <span
+                            class="status"
+                            [class.confirmed]="appointment.status === 'CONFIRMED'"
+                            [class.pending]="appointment.status === 'PENDING'"
+                            [class.completed]="appointment.status === 'COMPLETED'"
+                            [class.cancelled]="appointment.status === 'CANCELLED'">
+
+                            {{ appointment.status }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="appointment-info">
+
+                        <div class="info-item">
+
+                            <span class="label">
+                                Staff
+                            </span>
+
+                            <strong>
+                                {{ appointment.staffId?.name }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="label">
+                                Date
+                            </span>
+
+                            <strong>
+                                {{ appointment.appointmentDate | commonDate}}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="label">
+                                Time
+                            </span>
+
+                            <strong>
+                                {{ appointment.startTime }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="label">
+                                Price
+                            </span>
+
+                            <strong>
+                                ₹{{ appointment.serviceId?.price }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+                        <a
+                            class="view-btn"
+                            type="button"
+                            (click)="viewDetails(appointment._id)">
+
+                            View Details
+
+                        </a>
+
+                    </div>
+
                 </div>
 
-                <span class="status" [class.confirmed]="appointment.status === 'CONFIRMED'"
-                    [class.pending]="appointment.status === 'PENDING'"
-                    [class.completed]="appointment.status === 'COMPLETED'"
-                    [class.cancelled]="appointment.status === 'CANCELLED'">
-                    {{ appointment.status }}
-                </span>
-
-            </div>
-
-            <div class="appointment-info">
-
-                <div class="info-item">
-                    <span class="label">Staff</span>
-                    <strong>{{ appointment?.staffId?.name }}</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="label">Date</span>
-                    <strong>{{ appointment.appointmentDate }}</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="label">Time</span>
-                    <strong>{{ appointment.startTime }}</strong>
-                </div>
-
-                <div class="info-item">
-                    <span class="label">Price</span>
-                    <strong>₹{{ appointment.serviceId?.price }}</strong>
-                </div>
-
-            </div>
-
-            <div class="card-actions">
-
-                <a class="view-btn" type="button" (click)="viewDetails(appointment?._id)">
-                    View Details
-                </a>
-            </div>
+            }
 
         </div>
-
-        }
-
-    </div>
 
     } @else {
 
-    <div class="empty-state">
+        <div class="empty-state">
 
-        <div class="empty-icon">
-            📅
+            <div class="empty-icon">
+                📅
+            </div>
+
+            <h2>
+                No Appointments
+            </h2>
+
+            <p>
+                You don't have any appointments yet.
+            </p>
+
         </div>
-
-        <h2>No Appointments</h2>
-
-        <p>You don't have any appointments yet.</p>
-
-    </div>
 
     }
 

@@ -97,10 +97,7 @@ export class CustomerService {
     return this.http.get<AppointmentResponse>(`${this.apiUrl}/appointments/get/${id}`);
   }
 
-  cancelAppointment(id: string): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/booking/${id}/cancel`, {});
-  }
-
+  
   getStaffAppointments(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/appointments/staffAppointment`);
   }
@@ -112,6 +109,10 @@ export class CustomerService {
       `${this.apiUrl}/appointments/staff/${id}/confirm`,
       {}
     );
+  }
+
+  cancelAppointment(id: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/appointments/booking/${id}/cancel`, {});
   }
 
   rejectStaffAppointment(id: string,comment: string): Observable<any> {
