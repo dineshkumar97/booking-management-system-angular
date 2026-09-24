@@ -1,22 +1,13 @@
 import { Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { LoginService } from '../../auth/login/login-service';
 import { isPlatformBrowser } from '@angular/common';
-
+import { SocketService, AvailabilityStatus } from '../../core/socket.service';
 interface MenuItem {
   label: string;
   icon: string;
   route: string;
-}
-
-interface Product {
-  sku: string;
-  name: string;
-  category: string;
-  stock: number;
-  reorderPoint: number;
-  status: 'Low Stock' | 'Out of Stock';
 }
 @Component({
   selector: 'app-main-layout',
@@ -26,29 +17,18 @@ interface Product {
 })
 export class MainLayout implements OnInit {
   isDropdownOpen = signal(false);
-
+  socketConnected = false;
+  socketId = '';
   activeMenu = signal('Dashboard');
-
   userName = signal('');
   profileImage = '';
   private platformId = inject(PLATFORM_ID);
-
-  constructor(private router: Router, private loginService: LoginService) {
+  userDetails: any;
+  constructor(private router: Router, private loginService: LoginService, private socketService: SocketService) {
   }
-
 
   menuItems = signal<MenuItem[]>([]);
   ngOnInit(): void {
-
-    // if (this.router.url === '/customer-service-list') {
-    //   this.activeMenu.set('Service List');
-    // } else if (this.router.url === '/customer-booking-list') {
-    //   this.activeMenu.set('Booking');
-    // } else if (this.router.url === '/customer-dashboard') {
-    //   this.activeMenu.set('Dashboard');
-    // } else if (this.router.url === '/customer-appointment-list') {
-    //   this.activeMenu.set('Appointment');
-    // }
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd)
@@ -56,10 +36,8 @@ export class MainLayout implements OnInit {
       .subscribe(() => {
         this.updateActiveMenu();
       });
-
     const user = this.getUser();
     if (user?.role === 'CUSTOMER') {
-
       this.menuItems.set([
         {
           label: 'Dashboard',
@@ -87,9 +65,7 @@ export class MainLayout implements OnInit {
           route: '/customer-appointment-list'
         }
       ]);
-
     } else if (user?.role === 'STAFF') {
-
       this.menuItems.set([
         {
           label: 'Dashboard',
@@ -107,7 +83,6 @@ export class MainLayout implements OnInit {
           route: '/staff-appointments'
         }]);
     } else if (user?.role === 'ADMIN') {
-
       this.menuItems.set([
         {
           label: 'Dashboard',
@@ -136,9 +111,7 @@ export class MainLayout implements OnInit {
         }
       ]);
     }
-
     this.setActiveMenu();
-
   }
   setActiveMenu(): void {
     const currentUrl = this.router.url;
@@ -169,15 +142,12 @@ export class MainLayout implements OnInit {
       return null;
     }
     const user = JSON.parse(userDetails);
-    console.log('sk', user)
-
+    this.userDetails = user;
     if (user?._id) {
       this.getProfile(user._id);
     }
-
     return user;
   }
-
   getProfile(userId: string): void {
     this.loginService.getProfile(userId).subscribe({
       next: (response: any) => {
@@ -186,67 +156,132 @@ export class MainLayout implements OnInit {
           this.userName.set(user?.name || '');
           this.profileImage = user?.profileImage || '';
           this.loginService.setUser(response.data);
-          console.log(this.userName())
+          // this.socketService.connect();
         }
-      },
+        this.selectedStatus.set(user.availabilityStatus ?? 'available');
 
+      },
       error: (error) => {
         console.error('Get profile failed:', error);
       }
     });
   }
 
-
-  // ============================
-  // DASHBOARD STATISTICS
-  // ============================
-
-
-
-  // ============================
-  // REVENUE DATA
-  // ============================
-
-  revenueData = signal([
-    { month: 'Jan', value: 43 },
-    { month: 'Feb', value: 38 },
-    { month: 'Mar', value: 52 },
-    { month: 'Apr', value: 48 },
-    { month: 'May', value: 57 },
-    { month: 'Jun', value: 63 },
-    { month: 'Jul', value: 60 },
-    { month: 'Aug', value: 67 },
-    { month: 'Sep', value: 72 },
-    { month: 'Oct', value: 69 },
-    { month: 'Nov', value: 76 },
-    { month: 'Dec', value: 86 }
-  ]);
-
-  maxRevenue = computed(() => {
-    return Math.max(
-      ...this.revenueData().map(item => item.value)
-    );
-  });
-
-
   toggleDropdown() {
     this.isDropdownOpen.update(value => !value);
   }
-
   profile() {
     this.router.navigate(['/profile'])
     this.isDropdownOpen.set(false);
   }
-
   settings() {
     this.isDropdownOpen.set(false);
   }
-
   logout() {
+    const user = this.loginService.userDetails();
     this.isDropdownOpen.set(false);
     sessionStorage.clear();
     this.router.navigate(['/login']);
+     if (user?.uniqueUserId) {
+    this.socketService.disconnect();
+  }
   }
 
 
+
+  showStatusMenu = false;
+  toggleStatusMenu(): void {
+    this.showStatusMenu =
+      !this.showStatusMenu;
+  }
+changeStatus(status: AvailabilityStatus): void {
+
+  const staffId =
+    this.userDetails?.uniqueUserId;
+
+  if (!staffId) {
+    return;
+  }
+
+  // 1. Update UI immediately
+  this.selectedStatus.set(status);
+
+  // 2. Update current user object
+  if (this.userDetails) {
+    this.userDetails = {
+      ...this.userDetails,
+      availabilityStatus: status
+    };
+  }
+
+  // 3. Update sessionStorage
+  const storedUser =
+    sessionStorage.getItem('user_details');
+
+  if (storedUser) {
+
+    const user = JSON.parse(storedUser);
+
+    const updatedUser = {
+      ...user,
+      availabilityStatus: status
+    };
+
+    sessionStorage.setItem(
+      'user_details',
+      JSON.stringify(updatedUser)
+    );
+  }
+
+  // 4. Save to MongoDB through Socket.IO
+  this.socketService.changeStaffStatus(
+    staffId,
+    status
+  );
+
+  // 5. Close dropdown
+  this.showStatusMenu = false;
 }
+
+  selectedStatus = signal<AvailabilityStatus>('available');
+  get status(): AvailabilityStatus {
+
+    return this.selectedStatus();
+  }
+
+  get statusText(): string {
+    switch (this.selectedStatus()) {
+      case 'available':
+        return 'Available';
+      case 'busy':
+        return 'Busy';
+      case 'away':
+        return 'Away';
+      case 'dnd':
+        return 'Do not disturb';
+      case 'out_of_office':
+        return 'Out of office';
+      case 'offline':
+      default:
+        return 'Offline';
+    }
+  }
+
+  get statusIcon(): string {
+    switch (this.selectedStatus()) {
+      case 'available':
+        return '🟢';
+      case 'busy':
+        return '🔴';
+      case 'away':
+        return '🟡';
+      case 'dnd':
+        return '⛔';
+      case 'out_of_office':
+        return '🟣';
+      case 'offline':
+      default:
+        return '⚫';
+    }
+  }
+} 

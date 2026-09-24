@@ -28,13 +28,49 @@
     </nav>
     <!-- Sidebar Bottom -->
     <div class="sidebar-footer">
-      <div class="store-status">
-        <span class="status-dot"></span>
-        <div>
-          <strong>Store Online</strong>
-          <small>All systems operational</small>
-        </div>
+      <div class="status-dropdown" (click)="toggleStatusMenu()">
+        <span class="statusicon">
+          {{ statusIcon }}
+        </span>
+
+        <span class="statustext">
+          {{ statusText }}
+        </span>
+
+        <span class="status-arrow">
+          {{ showStatusMenu ? '▲' : '▼' }}
+        </span>
       </div>
+
+      @if (showStatusMenu) {
+      <div class="status-menu">
+        <button type="button" class="status-option" (click)="changeStatus( 'available')">
+          <span class="status-option-icon">🟢</span>
+          <span>Available</span>
+        </button>
+
+        <button type="button" class="status-option" (click)="changeStatus( 'busy')">
+          <span class="status-option-icon">🔴</span>
+          <span>Busy</span>
+        </button>
+
+        <button type="button" class="status-option" (click)="changeStatus('away')">
+          <span class="status-option-icon">🟡</span>
+          <span>Away</span>
+        </button>
+
+        <button type="button" class="status-option" (click)="changeStatus( 'dnd')">
+          <span class="status-option-icon">⛔</span>
+          <span>Do not disturb</span>
+        </button>
+
+        <button type="button" class="status-option" (click)="changeStatus('out_of_office')">
+          <span class="status-option-icon">🟣</span>
+          <span>Out of office</span>
+        </button>
+
+      </div>
+      }
     </div>
   </aside>
   <!-- ======================================
@@ -58,9 +94,9 @@
       </div>
       <!-- Header Right -->
       <div class="header-right">
-          <span class="profile-name">
-            {{ userName() }}
-          </span>
+        <span class="profile-name">
+          {{ userName() }}
+        </span>
         <div class="profile-container">
           <button class="profile-button" (click)="toggleDropdown()">
             @if (profileImage) {
@@ -94,6 +130,7 @@
         </div>
       </div>
     </header>
+
     <!-- ====================================
          DASHBOARD CONTENT
     ===================================== -->

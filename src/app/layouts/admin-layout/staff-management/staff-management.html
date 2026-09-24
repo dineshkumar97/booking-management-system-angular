@@ -251,6 +251,10 @@
                     </th>
 
                     <th>
+                        Status
+                    </th>
+
+                    <th>
                         Phone
                     </th>
 
@@ -328,6 +332,22 @@
                     </td>
 
                     <td>{{ staff.email }}</td>
+                    <td>
+                        <span class="status-dot" 
+                        [class.available]="staff.availabilityStatus === 'available'"
+                         [class.busy]="staff.availabilityStatus === 'busy'" 
+                         [class.away]="staff.availabilityStatus === 'away'"
+                         [class.dnd]="staff.availabilityStatus === 'dnd'" 
+                         [class.offline]="staff.availabilityStatus === 'offline'" 
+                         [class.out-of-office]="staff.availabilityStatus === 'out_of_office'"
+                       >
+                         </span>
+                        {{ getStatusText( staff.availabilityStatus) }}
+                    </td>
+
+                    <td>
+                        {{ staff.lastSeen ? (staff.lastSeen | commonDate) : '-' }}
+                    </td>
 
                     <td>{{ staff.phone || '-' }}</td>
 
