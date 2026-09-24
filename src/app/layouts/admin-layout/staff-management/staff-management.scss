@@ -857,3 +857,36 @@ tbody tr:hover {
     flex: 1;
   }
 }
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+.status-dot.online,
+.status-dot.available {
+  background-color: #22c55e;
+}
+
+.status-dot.busy {
+  background-color: #ef4444;
+}
+
+.status-dot.away {
+  background-color: #eab308;
+}
+
+.status-dot.dnd {
+  background-color: #dc2626;
+}
+
+.status-dot.out-of-office {
+  background-color: #a855f7;
+}
+
+.status-dot.offline {
+  background-color: #6b7280;
+}

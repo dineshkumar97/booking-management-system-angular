@@ -15,6 +15,9 @@ export interface User {
   profileImage?: string;
   services?: string[];
   isActive: boolean;
+  onlineStatus:any;
+  lastSeen:any;
+  availabilityStatus:any;
 }
 @Injectable({
   providedIn: 'root'

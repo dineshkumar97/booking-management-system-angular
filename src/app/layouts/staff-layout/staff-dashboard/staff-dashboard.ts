@@ -43,19 +43,10 @@ export class StaffDashboard implements OnInit {
 
         next: (response: any) => {
 
-          console.log(
-            'Staff Dashboard Response:',
-            response
-          );
+        
 
           const appointments =
             response?.data || [];
-
-          console.log(
-            'Staff Dashboard Appointments:',
-            appointments
-          );
-
 
           // =========================
           // TODAY
@@ -149,26 +140,7 @@ export class StaffDashboard implements OnInit {
           );
 
 
-          console.log(
-            'Today:',
-            this.todayAppointments()
-          );
-
-          console.log(
-            'Pending:',
-            this.pendingAppointments()
-          );
-
-          console.log(
-            'Confirmed:',
-            this.confirmedAppointments()
-          );
-
-          console.log(
-            'Completed:',
-            this.completedAppointments()
-          );
-
+         
         },
 
 

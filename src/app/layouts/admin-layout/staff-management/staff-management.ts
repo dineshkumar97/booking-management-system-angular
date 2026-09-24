@@ -25,11 +25,13 @@ import {
   Service
 } from '../admin-service';
 import { ToastService } from '../../../toast/toast-service';
+import { AvailabilityStatus, OnlineStatus } from '../../../core/socket.service';
+import { CommonDatePipe } from '../../../common/common-date.pipe';
 
 @Component({
   selector: 'app-staff-management',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonDatePipe],
   templateUrl: './staff-management.html',
   styleUrl: './staff-management.scss'
 })
@@ -157,7 +159,7 @@ export class StaffManagement implements OnInit {
 
       next: (response: User[]) => {
 
-        const staffUsers =response.filter(user => user.role === 'STAFF');
+        const staffUsers = response.filter(user => user.role === 'STAFF');
 
         this.staffList.set(staffUsers);
         console.log(
@@ -330,7 +332,7 @@ export class StaffManagement implements OnInit {
 
       email: formData.email,
 
-      phone:parseInt( formData.phone),
+      phone: parseInt(formData.phone),
 
       designation:
         formData.designation,
@@ -351,7 +353,7 @@ export class StaffManagement implements OnInit {
         .createUser(staffData)
         .subscribe({
 
-          next: (response:any) => {
+          next: (response: any) => {
 
             this.closeForm();
 
@@ -360,7 +362,7 @@ export class StaffManagement implements OnInit {
 
           },
 
-          error: (error:any) => {
+          error: (error: any) => {
             this.toast.error(error.error.error);
 
             console.error(
@@ -397,17 +399,17 @@ export class StaffManagement implements OnInit {
       )
       .subscribe({
 
-        next: (response:any) => {
+        next: (response: any) => {
 
           this.closeForm();
 
           this.getStaff();
-            this.toast.success(response.message);
+          this.toast.success(response.message);
 
         },
 
-        error: (error:any) => {
-            this.toast.error(error.error.error);
+        error: (error: any) => {
+          this.toast.error(error.error.error);
 
           console.error(
             'Update staff error:',
@@ -418,6 +420,36 @@ export class StaffManagement implements OnInit {
 
       });
 
+  }
+
+
+  onlineStatus: any;
+  availabilityStatus: any;
+  getStatusText(
+    availabilityStatus: AvailabilityStatus
+  ): string {
+    console.log('availabilityStatus')
+
+    switch (availabilityStatus) {
+      case 'available':
+        return 'Available';
+      case 'busy':
+        return 'Busy';
+
+      case 'away':
+        return 'Away';
+
+      case 'dnd':
+        return 'Do not disturb';
+
+      case 'out_of_office':
+        return 'Out of office';
+      case 'offline':
+        return 'Offline';
+
+      default:
+        return 'Available';
+    }
   }
 
 
