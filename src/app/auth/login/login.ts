@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -26,7 +26,8 @@ export class Login implements OnInit {
     private router: Router,
     private loginService: LoginService,
     private toastService: ToastService,
-    private socketService:SocketService
+    private socketService: SocketService,
+    private cdr: ChangeDetectorRef
   ) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -103,8 +104,7 @@ export class Login implements OnInit {
         );
         this.loginService.setUser(response.data);
         //  this.socketService.connect();
-
-    this.socketService.staffOnline(response.data.uniqueUserId);
+        this.socketService.staffOnline(response.data.uniqueUserId);
         this.toastService.success(
           'Login successful'
         );
@@ -151,6 +151,7 @@ export class Login implements OnInit {
       .get('password')
       ?.updateValueAndValidity();
   }
+
   public sendOtp(): void {
     const emailControl =
       this.loginForm.get('email');
@@ -179,6 +180,7 @@ export class Login implements OnInit {
         this.toastService.success(
           'OTP sent successfully'
         );
+        this.startResendCooldown();
       },
       error: (error) => {
         console.error(
@@ -192,6 +194,7 @@ export class Login implements OnInit {
       }
     });
   }
+
   public verifyOtp(): void {
     if (this.otpForm.invalid) {
       this.otpForm.markAllAsTouched();
@@ -287,5 +290,90 @@ export class Login implements OnInit {
     this.router.navigate([
       '/signup'
     ]);
+  }
+
+
+
+  resendCooldown = signal(0);
+  resendTimer: ReturnType<typeof setInterval> | null = null;
+  private startResendCooldown(): void {
+
+    if (this.resendTimer) {
+      clearInterval(this.resendTimer);
+    }
+
+    this.resendCooldown.set(300);
+
+    this.resendTimer = setInterval(() => {
+
+      this.resendCooldown.update(
+        value => value - 1
+      );
+
+      if (this.resendCooldown() <= 0) {
+
+        clearInterval(this.resendTimer!);
+
+        this.resendTimer = null;
+
+        this.resendCooldown.set(0);
+      }
+
+    }, 1000);
+  }
+  public resendOtp(): void {
+
+    if (this.resendCooldown() > 0) {
+      return;
+    }
+
+    const email =
+      this.loginForm.get('email')?.value
+        ?.trim()
+        .toLowerCase();
+
+    if (!email) {
+
+      this.toastService.error(
+        'Please enter your email address'
+      );
+
+      return;
+    }
+
+    this.loginService.sendLoginOtp({
+      email
+    }).subscribe({
+
+      next: (response) => {
+
+        console.log(
+          'OTP resent successfully:',
+          response
+        );
+
+        this.otpForm.reset();
+
+        this.toastService.success(
+          'New OTP sent successfully'
+        );
+
+        this.startResendCooldown();
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Resend OTP failed:',
+          error
+        );
+
+        this.toastService.error(
+          error?.error?.message ||
+          'Failed to resend OTP'
+        );
+      }
+
+    });
   }
 }
