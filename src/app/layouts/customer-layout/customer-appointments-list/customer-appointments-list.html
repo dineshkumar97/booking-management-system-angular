@@ -84,11 +84,22 @@
                         <div class="info-item">
 
                             <span class="label">
-                                Time
+                                Start Time
                             </span>
 
                             <strong>
                                 {{ appointment.startTime }}
+                            </strong>
+
+                        </div>
+                        <div class="info-item">
+
+                            <span class="label">
+                                End Time
+                            </span>
+
+                            <strong>
+                                {{ appointment.endTime }}
                             </strong>
 
                         </div>
@@ -102,6 +113,17 @@
 
                             <strong>
                                 ₹{{ appointment.serviceId?.price }}
+                            </strong>
+
+                        </div>
+                         <div class="info-item">
+
+                            <span class="label">
+                                Duration
+                            </span>
+
+                            <strong>
+                                {{ appointment.duration}} min's
                             </strong>
 
                         </div>

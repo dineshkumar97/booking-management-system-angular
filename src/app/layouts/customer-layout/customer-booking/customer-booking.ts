@@ -27,6 +27,7 @@ export class CustomerBooking implements OnInit {
   // =========================
   serviceName: any;
   servicePrice: any;
+  serviceDuration: any;
   // =========================
   // Staff
   // =========================
@@ -75,7 +76,7 @@ export class CustomerBooking implements OnInit {
     }
   }
 
-   getCustomerAppointments(): void {
+  getCustomerAppointments(): void {
     this.customerService.getCustomerAppointments().subscribe({
       next: (response: any) => {
         this.appointments = response.data;
@@ -109,7 +110,7 @@ export class CustomerBooking implements OnInit {
     this.addTimeSlots(
       selected,
       9,
-      13,
+      22,
       interval,
       now
     );
@@ -117,17 +118,17 @@ export class CustomerBooking implements OnInit {
     // EVENING
     // 07:30 PM - 10:00 PM
     // ==============================
-    this.addTimeSlots(
-      selected,
-      19,
-      22,
-      interval,
-      now
-    );
-    console.log(
-      'Available Time Slots:',
-      this.availableTimeSlots
-    );
+    // this.addTimeSlots(
+    //   selected,
+    //   19,
+    //   22,
+    //   interval,
+    //   now
+    // );
+    // console.log(
+    //   'Available Time Slots:',
+    //   this.availableTimeSlots
+    // );
     this.removeBookedSlots(selectedDate);
   }
   addTimeSlots(
@@ -176,31 +177,65 @@ export class CustomerBooking implements OnInit {
       );
     }
   }
-  removeBookedSlots(selectedDate: string): void {
 
-    const selected = new Date(selectedDate);
+  getTimeInMinutes(time: string): number {
+    const [value, period] = time.split(' ');
+    let [hours, minutes] = value.split(':').map(Number);
 
-    this.availableTimeSlots =
-      this.availableTimeSlots.filter(slot => {
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
 
-        const isBooked =
-          this.appointments.some((appointment:any) => {
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
-            const appointmentDate =
-              new Date(appointment.appointmentDate);
-
-            return (
-              appointmentDate.toDateString() ===
-              selected.toDateString() &&
-              appointment.startTime === slot &&
-              appointment.status !== 'CANCELLED' &&
-              appointment.status !== 'REJECTED'
-            );
-          });
-
-        return !isBooked;
-      });
+    return hours * 60 + minutes;
   }
+ removeBookedSlots(selectedDate: string): void {
+
+  const selected = new Date(selectedDate);
+
+  this.availableTimeSlots = this.availableTimeSlots.filter(slot => {
+
+    const slotTime = this.getTimeInMinutes(slot);
+    // const slotEnd = slotStart + this.serviceDuration;
+
+    const isBooked = this.appointments.some((appointment: any) => {
+
+      const appointmentDate =
+        new Date(appointment.appointmentDate);
+
+      if (
+        appointmentDate.toDateString() !==
+        selected.toDateString()
+      ) {
+        return false;
+      }
+
+      if (
+        appointment.status === 'CANCELLED' ||
+        appointment.status === 'REJECTED'
+      ) {
+        return false;
+      }
+
+      const appointmentStart =
+        this.getTimeInMinutes(appointment.startTime);
+
+      const appointmentEnd =
+        this.getTimeInMinutes(appointment.endTime);
+
+      // Check time overlap
+     return (
+          slotTime >= appointmentStart &&
+          slotTime < appointmentEnd
+        );
+    });
+
+    return !isBooked;
+  });
+}
   getStaffList(): void {
     this.customerService.getStaffAll().subscribe({
       next: (response: any) => {
@@ -215,7 +250,8 @@ export class CustomerBooking implements OnInit {
       next: (response: any) => {
         this.serviceDetails = response.data;
         this.serviceName = this.serviceDetails.name;
-        this.servicePrice = this.serviceDetails.price
+        this.servicePrice = this.serviceDetails.price;
+        this.serviceDuration = this.serviceDetails.duration
       },
       error: (error) => {
       }
@@ -240,7 +276,7 @@ export class CustomerBooking implements OnInit {
   selectStaff(staffId: any): void {
     this.staffselectBox = staffId?._id
     this.selectedStaffId = staffId;
-    console.log(this.selectedStaffId)
+    // console.log(this.selectedStaffId)
   }
   selectDate(date: string): void {
     this.selectedDate = date;
@@ -277,16 +313,38 @@ export class CustomerBooking implements OnInit {
         return false;
     }
   }
+
+  calculateEndTime(): string {
+    const [time, period] = this.selectedTime.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+
+    const date = new Date();
+    date.setHours(hours, minutes);
+    date.setMinutes(date.getMinutes() + this.serviceDuration);
+
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
   // =========================
   // Confirm Booking
   // =========================
   confirmBooking(): void {
+    console.log(this.calculateEndTime())
+
     const booking: any = {
       serviceId: this.serviceId,
       staffId: this.selectedStaffId?._id,
-      appointmentDate: '2026-09-26',
-      startTime: '16:00',
-      comments: 'Noted'
+      comments: 'Noted',
+      appointmentDate: this.selectedDate,
+      startTime: this.selectedTime,
+      endTime: this.calculateEndTime(),
+      duration: this.serviceDuration
     };
     this.customerService.createAppointment(booking).subscribe({
       next: (response: any) => {

@@ -14,8 +14,10 @@ interface Appointment {
   };
   appointmentDate: string;
   startTime: string;
+  endTime:string;
   status: string;
   orderId:string;
+  duration:any;
 }
 
 @Component({

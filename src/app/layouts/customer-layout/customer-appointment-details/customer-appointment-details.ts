@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../customer-service';
 import { ToastService } from '../../../toast/toast-service';
+import { CommonDatePipe } from '../../../common/common-date.pipe';
 
 interface Appointment {
   id: string;
@@ -18,7 +19,7 @@ interface Appointment {
 
 @Component({
   selector: 'app-customer-appointment-details',
-  imports: [],
+  imports: [CommonDatePipe],
   templateUrl: './customer-appointment-details.html',
   styleUrl: './customer-appointment-details.scss',
 })

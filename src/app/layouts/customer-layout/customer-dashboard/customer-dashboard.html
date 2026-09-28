@@ -139,6 +139,9 @@
         <div class="recent-time">
           {{ appointment.startTime }}
         </div>
+         <div class="recent-time">
+          {{ appointment.duration }}
+        </div>
 
         <div class="recent-status">
           <span class="status" [class.pending]="appointment.status === 'PENDING'"
