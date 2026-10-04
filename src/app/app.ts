@@ -3,7 +3,8 @@ import {
   signal,
   OnInit,
   PLATFORM_ID,
-  inject
+  inject,
+  HostListener
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -73,7 +74,7 @@ export class App implements OnInit {
     sessionStorage.removeItem('user_details');
     this.router.navigate(['/login']);
   }
-   /*
+   
      @HostListener('document:keydown', ['$event'])
     preventDevTools(event: KeyboardEvent): void {
 
@@ -103,7 +104,7 @@ export class App implements OnInit {
       event.preventDefault();
     }
 
-  */
+ 
 
 
 }
